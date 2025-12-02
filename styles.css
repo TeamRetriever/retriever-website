@@ -1,0 +1,57 @@
+/* Navigation Bar Layout */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Navigation Bar Image Sizing */
+nav a:first-child img {
+    height: 40px;
+    width: auto;
+    vertical-align: middle;
+}
+
+.nav-right img {
+    height: 24px;
+    width: auto;
+    vertical-align: middle;
+}
+
+/* Logo and Links Container - Side by Side */
+.logo-links-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    margin: 40px 0;
+}
+
+/* Logo Section */
+.logo-section {
+    text-align: left;
+}
+
+.logo-section img {
+    max-width: 400px;
+    width: 100%;
+    height: auto;
+}
+
+/* Links Section - Stacked vertically on the right */
+.links-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.links-section a {
+    text-align: left;
+}
+
