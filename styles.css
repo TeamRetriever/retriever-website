@@ -153,3 +153,81 @@ nav a:first-child img {
     text-decoration: underline;
 }
 
+/* Case Study Content Styles */
+.case-study-content {
+    margin-top: 80px;
+    padding-top: 20px;
+}
+
+.case-study-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    line-height: 1.8;
+}
+
+.case-study-container h1 {
+    font-size: 2.5em;
+    margin-bottom: 24px;
+    margin-top: 0;
+    color: #333;
+}
+
+.case-study-container h2 {
+    font-size: 2em;
+    margin-top: 48px;
+    margin-bottom: 24px;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
+}
+
+.case-study-container h3 {
+    font-size: 1.5em;
+    margin-top: 36px;
+    margin-bottom: 16px;
+    color: #444;
+}
+
+.case-study-container h4 {
+    font-size: 1.25em;
+    margin-top: 24px;
+    margin-bottom: 12px;
+    color: #555;
+}
+
+.case-study-container p {
+    margin-bottom: 16px;
+    color: #666;
+}
+
+.case-study-container ul,
+.case-study-container ol {
+    margin-left: 30px;
+    margin-bottom: 16px;
+}
+
+.case-study-container li {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.diagram-placeholder {
+    font-style: italic;
+    color: #999;
+    background-color: #f5f5f5;
+    padding: 12px;
+    border-left: 3px solid #ccc;
+    margin: 16px 0;
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Offset for anchor links to account for fixed header */
+#case-study {
+    scroll-margin-top: 80px;
+}
+
