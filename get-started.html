@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Started - Retriever</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <nav>
+            <a href="index.html">
+                <img src="assets/retriever-logo.png" alt="Retriever Logo">
+                Retriever
+            </a>
+            <div class="nav-right">
+                <a href="index.html">Home</a>
+                <a href="case-study.html">Case Study</a>
+                <a href="team.html">Our Team</a>
+                <a href="https://github.com/TeamRetriever/retriever" target="_blank" rel="noopener noreferrer">
+                    <img src="assets/github-logo.svg" alt="GitHub">
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Get Started Content -->
+    <main>
+        <section class="get-started-container">
+            <h1>Get Started with Retriever</h1>
+            <p class="intro-text">Follow these steps to spin up Retriever and start monitoring your applications with end-to-end observability.</p>
+            
+            <div class="instructions">
+                <div class="instruction-step">
+                    <h2>1. Prerequisites</h2>
+                    <p>Before you begin, ensure you have the following installed:</p>
+                    <ul>
+                        <li>Docker and Docker Compose (or your preferred container runtime)</li>
+                        <li>Node.js (version 18 or higher)</li>
+                        <li>Git</li>
+                    </ul>
+                </div>
+
+                <div class="instruction-step">
+                    <h2>2. Clone the Repository</h2>
+                    <p>Clone the Retriever repository from GitHub:</p>
+                    <pre><code>git clone https://github.com/TeamRetriever/retriever.git
+cd retriever</code></pre>
+                </div>
+
+                <div class="instruction-step">
+                    <h2>3. Install Dependencies</h2>
+                    <p>Install the required dependencies:</p>
+                    <pre><code>npm install</code></pre>
+                </div>
+
+                <div class="instruction-step">
+                    <h2>4. Configure Environment Variables</h2>
+                    <p>Create a <code>.env</code> file in the root directory and configure the necessary environment variables:</p>
+                    <pre><code>cp .env.example .env
+# Edit .env with your configuration</code></pre>
+                </div>
+
+                <div class="instruction-step">
+                    <h2>5. Start Retriever</h2>
+                    <p>Start the Retriever platform using Docker Compose:</p>
+                    <pre><code>docker-compose up -d</code></pre>
+                    <p>Or if you prefer to run it locally:</p>
+                    <pre><code>npm start</code></pre>
+                </div>
+
+                <div class="instruction-step">
+                    <h2>6. Access the Dashboard</h2>
+                    <p>Once Retriever is running, access the dashboard at:</p>
+                    <pre><code>http://localhost:3000</code></pre>
+                </div>
+
+                <div class="instruction-step">
+                    <h2>7. Connect Your Application</h2>
+                    <p>Follow the integration guide to connect your application to Retriever and start collecting traces.</p>
+                </div>
+            </div>
+
+            <div class="help-section">
+                <h2>Need Help?</h2>
+                <p>If you encounter any issues during setup, please refer to:</p>
+                <ul>
+                    <li><a href="https://github.com/TeamRetriever/retriever" target="_blank" rel="noopener noreferrer">GitHub Repository</a> for documentation and issues</li>
+                    <li><a href="case-study.html">Case Study</a> for examples and use cases</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
+
