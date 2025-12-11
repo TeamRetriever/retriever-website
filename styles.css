@@ -231,3 +231,60 @@ html {
     scroll-margin-top: 80px;
 }
 
+/* Team Section Styles */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    margin: 40px 0;
+    padding: 40px 0;
+}
+
+.team-member {
+    text-align: center;
+}
+
+.team-member img {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.team-name {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+    margin: 8px 0 4px 0;
+}
+
+.team-role {
+    font-size: 1em;
+    color: #666;
+    margin: 0 0 4px 0;
+}
+
+.team-location {
+    font-size: 0.9em;
+    color: #888;
+    margin: 0;
+}
+
+/* Team Page Styles */
+.team-page-container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.team-page-container h1 {
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #333;
+}
+
