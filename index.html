@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="assets/retriever-logo.png">
     <title>Retriever - E2E Observability Platform</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -41,23 +42,106 @@
 
         <!-- Case Study Content -->
         <section id="case-study" class="case-study-content">
+            <!-- Table of Contents Sidebar -->
+            <aside class="toc-sidebar">
+                <nav class="toc-nav">
+                    <ul class="toc-list">
+                        <li><a href="#what-is-retriever">What is Retriever?</a></li>
+                        <li class="toc-parent">
+                            <div class="toc-parent-header">
+                                <a href="#modern-observability">2. The Modern Observability Space</a>
+                                <button class="toc-toggle" aria-label="Toggle section"></button>
+                            </div>
+                            <ul class="toc-sublist">
+                                <li><a href="#what-is-observability">2.1 What is Observability?</a></li>
+                                <li><a href="#tracing-modern">2.1: Tracing in Modern Observability</a></li>
+                                <li><a href="#instrumentation">2.2: Instrumentation and How Observability is Practically Applied</a></li>
+                                <li><a href="#value-traces">2.3: Value of Traces</a></li>
+                                <li><a href="#mcp-server">2.4: What is an MCP server?</a></li>
+                            </ul>
+                        </li>
+                        <li class="toc-parent">
+                            <div class="toc-parent-header">
+                                <a href="#existing-solutions">3. Existing Observability Solutions</a>
+                                <button class="toc-toggle" aria-label="Toggle section"></button>
+                            </div>
+                            <ul class="toc-sublist">
+                                <li><a href="#commercial-saas">3.1: Commercial SaaS Platforms</a></li>
+                                <li><a href="#self-hosted">3.2: Self-Hosted Open Source Tools</a></li>
+                            </ul>
+                        </li>
+                        <li class="toc-parent">
+                            <div class="toc-parent-header">
+                                <a href="#retriever-solution">4. Retriever's Solution</a>
+                                <button class="toc-toggle" aria-label="Toggle section"></button>
+                            </div>
+                            <ul class="toc-sublist">
+                                <li><a href="#intended-user">4.1: The Intended User</a></li>
+                                <li><a href="#retriever-offers">4.2: What Retriever Offers</a></li>
+                                <li><a href="#comparing-retriever">4.3: Comparing Retriever with Other Platforms</a></li>
+                            </ul>
+                        </li>
+                        <li class="toc-parent">
+                            <div class="toc-parent-header">
+                                <a href="#design-decisions">5. Important Design Decisions / Tradeoffs</a>
+                                <button class="toc-toggle" aria-label="Toggle section"></button>
+                            </div>
+                            <ul class="toc-sublist">
+                                <li><a href="#domino-effect">5.1: The Domino Effect</a></li>
+                                <li><a href="#jaeger-now-what">5.2: So Jaeger. Now What?</a></li>
+                                <li><a href="#jaeger-architecture">5.3: All-In-One vs Separate Jaeger Architecture</a></li>
+                                <li><a href="#aws-deployment">5.4: Why AWS? Where should Retriever be Deployed?</a></li>
+                                <li><a href="#ecs-fargate">5.5: Selecting ECS Fargate</a></li>
+                                <li><a href="#mcp-implementation">5.6: MCP Implementation</a></li>
+                            </ul>
+                        </li>
+                        <li class="toc-parent">
+                            <div class="toc-parent-header">
+                                <a href="#architecture">6. Architecture: Design Flow</a>
+                                <button class="toc-toggle" aria-label="Toggle section"></button>
+                            </div>
+                            <ul class="toc-sublist">
+                                <li><a href="#jaeger-collector">6.1 Jaeger Collector</a></li>
+                                <li><a href="#opensearch">6.2: OpenSearch</a></li>
+                                <li><a href="#prometheus">6.3: Prometheus</a></li>
+                                <li><a href="#jaeger-query">6.4: Jaeger Query</a></li>
+                                <li><a href="#jaeger-ui">6.5: Jaeger UI</a></li>
+                                <li><a href="#mcp-server-arch">6.6: MCP Server</a></li>
+                                <li><a href="#alertmanager">6.7: AlertManager</a></li>
+                                <li><a href="#securing-retriever">6.8 Securing Retriever</a></li>
+                                <li><a href="#packaging-aws">6.9: Packaging up in AWS</a></li>
+                            </ul>
+                        </li>
+                        <li class="toc-parent">
+                            <div class="toc-parent-header">
+                                <a href="#future-plans">7. Future Plans with Retriever</a>
+                                <button class="toc-toggle" aria-label="Toggle section"></button>
+                            </div>
+                            <ul class="toc-sublist">
+                                <li><a href="#enhancing-mcp">7.1: Enhancing The MCP Server</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#team">Our Team</a></li>
+                    </ul>
+                </nav>
+            </aside>
             <div class="case-study-container">
-                <h1>What is Retriever?</h1>
+                <h1 id="what-is-retriever">What is Retriever?</h1>
                 <p>Retriever is an open-source, self-hosted observability service that puts valuable telemetry data in the hands of small teams. If you're running your application in AWS, Retriever can be ready to collect and display data in a few minutes. AI agents can use the Retriever MCP server to query and analyze data, so that you can diagnose and solve problems without having to alt-tab out of your IDE.</p>
                 <p>Retriever is a self-hosted distributed tracing observability platform for small applications. Through a custom MCP server, it enables developers to query and analyze trace data directly from Cursor and Claude desktop allowing them to quickly identify, diagnose, and resolve production issues without leaving their workflow.</p>
                 <p class="diagram-placeholder">(diagram: a higher-level overview of Retriever. Something like connecting the user's app to Retriever and having the MCP facilitate useful observability data back via an LLM.)</p>
 
-                <h2>2. The Modern Observability Space (background)</h2>
+                <h2 id="modern-observability">2. The Modern Observability Space (background)</h2>
                 
-                <h3>2.1 What is Observability?</h3>
+                <h3 id="what-is-observability">2.1 What is Observability?</h3>
                 <p>Observability, at its heart, is about the ability to understand the current state of your application. Specifically, it is "tooling or a technical solution that allows teams to actively debug their system. Observability is based on exploring properties and patterns not defined in advance." While it can be utilized to support many purposes, from tracking service-level objectives (SLO) to deployment validation, observability is especially useful when, inevitably, something goes sideways in production and all heads turn towards the engineering team until the problem is identified and fixed.</p>
                 <p>Traditionally, observability was done through logging outputs from an application to help the engineering team make sense of the application's state. More recently, it has evolved into a robust set of tools and best practices that use multiple signals (metrics and traces in addition to logs), data stores, and graphic visualizers that make the process of debugging more data-rich.</p>
 
-                <h3>2.1: Tracing in Modern Observability + Values of traces 2.3</h3>
+                <h3 id="tracing-modern">2.1: Tracing in Modern Observability + Values of traces 2.3</h3>
                 <p>As the complexity of modern applications grows, especially in the context of distributed systems,</p>
                 <p>Growing out of traditional observability, which focused on logs, modern observability expands the use of signals refers to utilizing the "three pillars of observability:" logs, metrics, and traces (1). These pillars have emerged as answers to the aforementioned complicated nature of modern architecture. (diagram: some image that contains a circle for each section. Each with an arrow pointing towards modern observability).</p>
 
-                <h3>2.2: Instrumentation and How Observability is Practically Applied</h3>
+                <h3 id="instrumentation">2.2: Instrumentation and How Observability is Practically Applied</h3>
                 <p>While each pillar provides insight into the inner workings of applications, how does one go about implementing observability for their own use?</p>
                 
                 <h4>Instrumentation</h4>
@@ -72,10 +156,10 @@
                 <h4>Alerting</h4>
                 <p>Observability platforms have interactions at all times, and it is not a realistic answer to be able to just know when to check for telemetry errors. Alerts provide a solution by allowing for configurable messages to be sent to popular platforms like Slack and Microsoft Teams. These messages can be customized to only be sent when a predefined condition is met, such as error rate thresholds being exceeded, service outages, or latency spikes. Often these alerts will send you to a visualizer to observe the source of the message in more detail.</p>
 
-                <h3>2.3: Value of Traces</h3>
+                <h3 id="value-traces">2.3: Value of Traces</h3>
                 <p>A single trace is made of one or more spans, with the first span representing the root span. Each underlying span underneath its parent represents in depth more context of what occurs during a request. Traces capture the complete journey of a request as it flows through multiple services. This is perfect when targeting users in a distributed system. Traces also allow for powerful RCA or root cause analysis across service boundaries if, and when something breaks within a distributed system. The natural hierarchical structure of traces, that of parent-child spans, allows for well-orchestrated mapping to LLMs to reason about their sequences when using our MCP server. The services which Traces travel through implicitly capture which services communicate with which.This translates to automatic generation of service maps without any manual configuration (2).</p>
 
-                <h3>2.4: What is an MCP server? How does it involve observability?</h3>
+                <h3 id="mcp-server">2.4: What is an MCP server? How does it involve observability?</h3>
                 <p>An important question to ask is how can modern observability be leveraged to enable AI assisted debugging and analysis? With tools like Claude and Cursor it is achievable now. However the workflow by itself is not very convenient. It requires taking some observability data that the LLM does not have context to and pasting into its chat window. Or setting up some API endpoint that can be quite tiresome.Thankfully a suitable standard for these problems has been introduced, and that standard is known as MCP.</p>
                 
                 <h4>Model Context Protocol</h4>
@@ -87,23 +171,23 @@
                 <h4>MCP Primitives: Tools, Resources, Prompts</h4>
                 <p>The most critical concept when it comes to MCP is the primitives. These are what define what clients and servers can offer each other. Each primitive specifies the types of contextual info that can be shared with AI applications and the types of actions that can be performed. The three core primitives that MCP defines are Tools, Resources, and Prompts. You can think of tools like function calls for the AI applications to call. These are actions that the AI applications can invoke to perform. Resources are static content that are meant to provide contextual info to the AI application. Think file contents and database records. Finally, Prompts are templates meant to help with structuring with LLMs. Their non-deterministic nature can lead to unexpected results even with adequate tooling and resources. (diagram: for each primitive, have an associated image, e.g., tooling can be some sort of action, resources can be a DB symbol)</p>
 
-                <h2>3. Existing Observability Solutions:</h2>
+                <h2 id="existing-solutions">3. Existing Observability Solutions:</h2>
                 <p>If you're implementing observability in your application, … This is the "buy or build" dilemma. Commercial SaaS platforms, like Datadog, are easy to use and feature-rich, but often come with a significant price tag.</p>
                 <p>Teams that don't. There are lots of open-source options out there. These don't cost money, but they can cost significant engineer time. Setting up and maintaining observability services gets complicated quickly.</p>
 
-                <h3>3.1: Commercial SaaS Platforms:</h3>
+                <h3 id="commercial-saas">3.1: Commercial SaaS Platforms:</h3>
                 <p>Platforms like Datadog and Honeycomb allow teams to abstract away their observability needs. The user takes responsibility for instrumenting their app, and the platform handles everything else.</p>
                 <p>These platforms host all infrastructure, and users simply need to send the data they want to observe. They are feature-packed and bundle many different aspects of observability together. These platforms can incur high costs alongside these versatile sets of features, and may include some features that many users may find just not useful. Scaling is usually on the same curve as the user's costs. Software is closed off and proprietary, even though some open-sourced SDKs are open-sourced. Data management is not accessible to the user, and the transparency of how telemetry data is stored and processed is not clear. Furthermore, data retention may be crucial to a individual user or team. These larger platforms can keep only samples of data, and just for periodic amounts of time. From a time to value proposition, these services can be extremely fast or still take some time, depending on how intuitive users find the services. AI/LLM integration is only available in some of these platforms, such as Honeycomb and Datadog. Some have still not developed their own MCP servers.</p>
 
-                <h3>3.2: Self-Hosted Open Source Tools:</h3>
+                <h3 id="self-hosted">3.2: Self-Hosted Open Source Tools:</h3>
                 <p>On the other side of the fence lies the DIY version of Observability. Many of the flaws apparent in the commercial platforms have solutions here. Data ownership, Open source work, Opaque Storage and processing, pricing, etc. These are much more favorable. However, they come at the cost of mostly time and effort. Users will have to know much more about the specific portion of telemetry data they are attempting to observe. In fact, they end up spending more time trying to learn how to solve what was meant to be the original solution to their problem in the first place. This is a very heavy trade-off when a user simply wants to figure out where in their microservice architecture is the source of some particular troublesome bug that found itself in Prod.</p>
 
-                <h2>4. Retriever's Solution:</h2>
+                <h2 id="retriever-solution">4. Retriever's Solution:</h2>
                 
-                <h3>4.1: The Intended User</h3>
+                <h3 id="intended-user">4.1: The Intended User</h3>
                 <p>Retriever was built with a very specific subset of users in mind. These include solo or small developer teams with a desire for end-to-end observability for their applications. They want to have ownership of their data, to pay low costs, have an easy and seamless setup, and be able to self host their application on AWS. The intended use case is to provide a service narrowed in scope and features, but powerful and efficient in what it provides.</p>
 
-                <h3>4.2: What Retriever Offers:</h3>
+                <h3 id="retriever-offers">4.2: What Retriever Offers:</h3>
                 <p>Retriever positions itself as an end to end distributed observability platform with a focus on tracing. We use Trace data to utilize effective alternatives for both traditional logs and metrics. Each span within a trace will contain a span event which can be used in a similar fashion to a log. Aggregate trace data will be used to derive metric data from. Alerts will also be present, with errors being sent to slack accounts that users attach. With this focus on traces in conjunction with Retriever's MCP, this allows for intended users to be able to discover where issues are occurring in their application, diagnose the root cause, and quickly resolve them in their IDE of choice, with their LLM Assistant of choice, in an effective manner.</p>
 
                 <h4>Debugging with the Retriever MCP server</h4>
@@ -112,14 +196,14 @@
                 <p>Imagine you are working for a development team in a microservice architecture. You focus on the application side for an e-commerce app, and you've noticed that the cart services are not working, and there is nothing apparent in the code you work in, nor in the ui, what the cause of the error may be. The work flow is not going to be super convenient to have to constantly swap between different screens to grab the telemetry data you need to your ide.</p>
                 <p>With an MCP, this scenario becomes much more convenient. You can utilize a relevant tool called which will allow your AI application of choice to gain access to relevant observability in the same IDE in which you could have worked on the same application code. You can now find the source of the problem and take the appropriate steps to fix it. (Diagram: this can be two different pictures. The first is a series of steps for the first long-winded path of no MCP, and then the 2nd with the more convenient set of steps with the MCP.</p>
 
-                <h3>4.3: Comparing Retriever with Other Platforms and Tools</h3>
+                <h3 id="comparing-retriever">4.3: Comparing Retriever with Other Platforms and Tools</h3>
                 <p class="diagram-placeholder">(diagram: here will be a comprehensive chart comparing e2e observability platforms, DIY platforms, and Retriever. The following categories come to mind: Ease of setup, Data ownership, Feature fullness, Pricing, Support, Open Source, Data black boxed, Scalability, AI/LLM integration, Time to value, and Target audience.</p>
                 <p class="diagram-placeholder">Playful diagram</p>
                 <p class="diagram-placeholder">More serious one</p>
 
-                <h2>5. Important Design Decisions / Tradeoffs</h2>
+                <h2 id="design-decisions">5. Important Design Decisions / Tradeoffs</h2>
                 
-                <h3>5.1: The Domino Effect:</h3>
+                <h3 id="domino-effect">5.1: The Domino Effect:</h3>
                 <p>The most consequential choice that was made in the development process was that of selecting Traces as the main signal to focus on. The main benefits are alluded to previously here. But with this decision comes many cascading after effects. Our architecture has to be built with traces as the focus. The most important aspects are the storage layer and the visualization layer. With that in mind, it is first important to think of the Distributed Tracing Backends that exist. Or systems designed to store, query, and visualize distributed traces from instrumented applications. Different platforms optimize and integrate completely differently and have unique focuses.</p>
                 <p>For these platforms, we considered many options. Some final options include Signoz, Grafana Tempo, and Quickwit. Signoz was designed with all three signal pillars in mind, so if we wanted to design our architecture to be more fleshed out to include logs and metrics, this would be more convenient. Signoz is backed by the Clickhouse database (6), which allows for excellent query performance for large-scale telemetry data. Signoz also allows for more customizable and unique UI features. Ultimately, Signoz did not align with our focus. There were some licensing issues that made the team uncertain, and while the Clickhouse database promised excellent query speed, it seemed overkill for the users and use case the team had in mind. And while the UI versatility is an impressive feature, it did require more hands-on setup to have a good visualization layer setup.</p>
                 <p>Tempo, in a similar fashion to Signoz, would allow for metrics and logs to be implemented more easily. Grafana has its own ecosystem with Tempo, Loki,and Prometheus, which would make integration quite simple. Tempo comes with great cost efficiency as it uses S3 object storage for trace data. This significantly lowers storage cost compared to a standard database-backed solution. This is quite practical for dealing with Telemetry data. The main concern with Tempo is that, traditionally, querying was quite a bit less flexible compared to other options. They had recently added their own query language in TraceQL to query by specific attributes, but the team felt quite unsure of the performance here and how granular it would allow for with particular queries.</p>
@@ -128,25 +212,25 @@
                 <p class="diagram-placeholder">no text descriptions</p>
                 <p class="diagram-placeholder">with text descriptions</p>
 
-                <h3>5.2: So Jaeger. Now What?</h3>
+                <h3 id="jaeger-now-what">5.2: So Jaeger. Now What?</h3>
                 <p>Now, Jaeger was decided upon as the key cog, but a datastore was still needed to store trace data. Seamless integration with Jaeger was a must. High Cardinality filtering was also very important, as it allows for more versatile and granular queries on trace data. Being able to search effectively with natural language queries was also a very important factor for the convenience of our users. The final contenders were ElasticSearch, and OpenSearch.</p>
                 <p>Both data stores are document store types.They excel at querying specific data, which aligns well with our need for searching text efficiently. Compared to columnar databases they are not nearly as efficient when it comes to sheer read speed or aggregate data analysis (7). However, these differences are not nearly as much of a factor when dealing with the scale of applications that Retriever aims to work with. Both stood out for how smoothly they fit within the jaeger system. For instance the OTLP formatted span structure that jaeger uses is in a document format. This clean mapping of structure allows for a nice integration of the data store with our distributed tracing backend.</p>
                 <p>ElasticSearch was initially chosen as the data store of choice. It has a mature ecosystem with extensive documentation, provides good performance with high query workloads, and integrates well with Jaeger. However, in recent years, it was modified to not be open-sourced and then changed back to open-sourced, which made us a bit unsure about using the product. Luckily, OpenSearch exists, which is a totally open-sourced forked version of ElasticSearch. OpenSearch does not have the extensive, nor the consistent quality of documentation, but it does have rapid community development. OpenSearch does not falter significantly in performance and, in some cases, performs better than ElasticSearch (8). Both fit the needs of Retriever well, and OpenSearch allowed the team to be more comfortable in being totally open source as the data store of choice.</p>
 
-                <h3>5.3: All-In-One vs Separate Jaeger Architecture</h3>
+                <h3 id="jaeger-architecture">5.3: All-In-One vs Separate Jaeger Architecture</h3>
                 <p>Retriever settled on having a separate Jaeger Collector and Query Architecture. This decision was made on the following factors. Being independent allows for independent scaling, meaning both the collector and query services can be scaled independently based on actual bottlenecks for each in isolation. This also provides operational flexibility to optimize, monitor, and troubleshoot each service as a single entity. This architecture also cleanly maps to the containerized deployments in ECS, where each component runs its own service.</p>
 
-                <h3>5.4: Why AWS? Where should Retriever be Deployed?</h3>
+                <h3 id="aws-deployment">5.4: Why AWS? Where should Retriever be Deployed?</h3>
                 <p>Retriever was always to be a self-managed application on AWS. We are most comfortable and familiar with the AWS platform. The main question was where Retriever should be deployed? On our own VPC? Or on the user's VPC? Deploying in the user's account meant that there was a level of configuration that the user must have prepared beforehand. They would need at least one private subnet and two public subnets. This info would be required during the setup process in the CLI.</p>
                 <p>Deploying in our own Subnet means the user can avoid the trouble of any pre-configuration work, but instead comes with its own compromises. Retriever would need to implement MTLS or Mutual Transport Layer Security in the connection between the user's OTel agent and Retriever's Jaeger Collector. This would have to be done over the public internet and would result in higher latency and more computation to get data from agent to collector. Another burden on the user would be that they would have to configure their OTel agent to support MTLS. In the end, after weighing these trade-offs, we came to the conclusion that deploying Retriever in the user VPC would result in the most effective balance of work on the user-end and effectiveness of Retriever's architecture. (diagram: two charts loosely showing the two different scenarios at play. One where Retriever is in the user's VPC, and they have to do some setup work, vs where Retriever is set up in our VPC and has to establish a connection through MTLS and communicate over the internet. This results in more latency and computational overhead.)</p>
                 <p class="diagram-placeholder">in user's vpc</p>
                 <p class="diagram-placeholder">in separate vpcs</p>
 
-                <h3>5.5: Selecting ECS Fargate:</h3>
+                <h3 id="ecs-fargate">5.5: Selecting ECS Fargate:</h3>
                 <p>When it came to how we wanted to containerize services, the two final options came down to ECS Fargate and EC2. In development, a Docker Compose file was utilized to build images from Docker Hub. This workflow was nice, but not generally acceptable in production. When looking to migrate, Kubernetes was quickly eliminated. Although Kubernetes is open-sourced, offers high scalability, and integrates well with AWS, the learning curve was deemed too steep compared to other options. The benefit does not really outpace alternatives enough for that to be worth the time sink.</p>
                 <p>Initially, having a cluster of EC2 types seems beneficial over using Fargate. Costs would be set to be based on the exact amount of memory and capacity provisioned. Another nice quality is that it would allow for greater customization of the environment compared to Fargate. The deciding factor was the one major downside of using EC2. You had to maintain, upkeep, and handle security for each individual EC2 instance. Each of us had dealt with some difficulties in these regards. And in comparison, Fargate would allow for our attention to be strictly on how our infrastructure should operate and communicate. So, despite pricing being favorable for hosting our services as an EC2 cluster, ECS Fargate was more aligned with our project goals.</p>
 
-                <h3>5.6: MCP Implementation</h3>
+                <h3 id="mcp-implementation">5.6: MCP Implementation</h3>
                 <p>The Retriever MCP went through various iterations with its tools. At first, get_traces was two separate tools: get_traces and get_errors. get_service_health was intended to be one of two tools focused on the health of a service, with the second being a compare_services tool to be able to compare two different periods of time and the service's state. After reflection, we determined that each pair could be merged together for a more fully fleshed out and effective tooling. Ultimately, it seemed better for a user to have to do fewer tool calls and be able to form the shape of the call to more accurately reflect their inquiries.</p>
                 <p>It became quickly apparent that Data Distillation would be a major component of the MCP server to account for. When working with traces as a structure across large services, these objects that are returned can become immensely large in size. Early in the tool development stage, get_traces had no distillation, and even one single trace would go over the limit for an MCP host like Claude desktop. The distillation method that the Retriever MCP incorporates was able to shrink the size of the object upwards of 90-95%. All while preserving critical attributes necessary for appropriate responses.</p>
                 <p>This distillation was accomplished by utilizing the structure of the Jaeger v3 api. The documentation for this api shows the structure of trace data, and this allowed for business logic to iterate through nested objects to relevant data for particular attributes. For example with a single trace if we wanted to grab the span events from it you would iterate through the top level resourceSpans then iterate through scopeSpans, then you can access spans. For a particular span you can then access events. All relevant properties are accessed in the same way. Each individual property is small in isolation and because of this exponential decrease in volume of data being returned, trace data is allowed to be queried and used for troubleshooting purposes without any issues related to speed or effectiveness. (diagram: show 2 different scenarios discussed. One where the MCP host (claude for example) cannot use the get_trace tool because the returned object is too large. Another which can show a smaller distilled object that allows for the host to call and use tools easily.)</p>
@@ -154,28 +238,28 @@
                 <p class="diagram-placeholder">After</p>
                 <p>An additional decision that was made pertained to handling the calculation logic of date and time-related data. Both the Jaeger and Prometheus APIs required specific time formatting, and therefore, the option was available to leave calculating that time to be more human-readable to the LLM. For a myriad of factors, LLMs tend to struggle with time (8). And through testing, this also reared its head, often hallucinating improper times and dates. Therefore, business logic was added in for the MCP to handle this logic so LLM models would not have to process it.</p>
 
-                <h2>6. Architecture: Design Flow</h2>
+                <h2 id="architecture">6. Architecture: Design Flow</h2>
                 <p class="diagram-placeholder">(diagram: our excalidraw full architecture design can go here)</p>
 
-                <h3>6.1 Jaeger Collector:</h3>
+                <h3 id="jaeger-collector">6.1 Jaeger Collector:</h3>
                 <p>The user application is to be instrumented with OTel via OTLP to have compatibility with Retriever. From here, the Jaeger Collector operates as the vehicle to collect incoming trace data. The instrumented OTel application sends this data to the collector, and this is done over the gRPC (Remote Procedure Call) and HTTP protocols. This is done on ports 4317 and 4318, respectively. Once all trace data has been collected, the collector will process the data to prepare it for the data store that these traces will be sent to. Finally, the collector will handle exporting. Here, it will actually export to two different sources. Trace data is sent to OpenSearch, which is the backend of choice. These traces are batched in bulk and pushed to OpenSearch. For each span in every individual trace, spanmetrics are extracted. These will not be exported but will be ready for extraction for Prometheus, the metric storage of choice, later. (diagram: here is a more specified diagram focusing on the collector and its 3 sections. Collector, Processor, and exporter. For each section, perhaps show some of the actions occurring. E.g., OTel app sending trace data to the collector. The processor transforms the data. Then showing the trace data being exported, and the span metrics in a different section.</p>
 
-                <h3>6.2: OpenSearch</h3>
+                <h3 id="opensearch">6.2: OpenSearch</h3>
                 <p>The trace data is sent to its storage with OpenSearch. When these batches are sent to OpenSearch they are written in bulk to the data store. OpenSearch is a Document database that stores its data in JSON format. This allows for persistent storage for all trace data. OpenSearch stores each span as a document with its trace ID, parent span ID, timestamps, tags, and logs. In Retriever, OpenSearch is configured to have inverted indices (9) which allows for more versatile querying by compressing and storing full documents. These indices are partitioned by each day, e.g jaeger-span-2025-11-22. Traces are naturally grouped by time and queries typically focus on recent data. This manner of storage lends itself appropriately for how traces will be accessed. It also allows for natural and easy retention in how often indices should or should not be deleted. (diagram: there will be two different images. One for forward or standard document indexing, one for inverted. There can be 7 documents. Each containing a traceID, service, status and user. The diagram will show a query for service=payment and status=500 so make sure a few have those values. For the forward indexing show how you have to check all documents to see if these parameters match. This will be O(n) because it has to shift through the entire list. In contrast, for the inverted indices you only have to look up the indices that match the given properties. This will be o(1) in comparison and more efficient. (This may be a bit tough to follow. here is a video that helps.)</p>
                 <p class="diagram-placeholder">Forward Index Diagram</p>
                 <p class="diagram-placeholder">Inverted Index Diagram</p>
 
-                <h3>6.3: Prometheus</h3>
+                <h3 id="prometheus">6.3: Prometheus</h3>
                 <p>Next up is Prometheus. Prometheus will scrape (or pull) spanmetrics from the Jaeger Collector. The Spanmetrics will aggregate all span data over an interval of time. These will be exposed for Prometheus to grab from. There will be a scrape interval, which is the interval during which Prometheus is scraping the collector. So all spanmetrics will be accumulated once each scrap interval has passed. (diagram: one picture of spanmetrics accumulating over 15 seconds. Then have a port above it, then have something like a shovel scooping the data into a box, representing Prometheus, once 10s have passed. Retriever utilizes Prometheus' own query language, PromQL, to gain useful information from the spanmetrics being stored. Distributions of how long spans take, Percentile calculations (P50, P95, P99, etc), and counters for how many spans occur are some that stand out.</p>
                 <p class="diagram-placeholder">Diagram put on pause here due to Ian's comment</p>
 
-                <h3>6.4: Jaeger Query:</h3>
+                <h3 id="jaeger-query">6.4: Jaeger Query:</h3>
                 <p>The query layer here is Jaeger Query. It connects to OpenSearch to fetch stored Trace data. It mainly serves as the bridge between the trace storage and anything that needs the trace data. For components that need the trace data like the UI layer and MCP layer, The query layer provides the RESTful API that these services will need. (diagram: show a shape in the center as the Jaeger query. On the left are the two shapes. Jaeger UI and MCP server which points towards it. To the right of the query have an arrow point towards openSearch)</p>
 
-                <h3>6.5: Jaeger UI:</h3>
+                <h3 id="jaeger-ui">6.5: Jaeger UI:</h3>
                 <p>This is where users can use a web interface for visualization of trace data. The trace data is retrieved through the Jaeger query Layer and then made accessible on port 16686. The Jaeger UI allows users to search by service, operation, tags, duration, trace limit, and Lookback. Once you have filtered the trace data you want, you can observe particular traces or spans, use Trace waterfall charts or Trace scatter plots for logical understanding of the source of possible errors, and observe where services are performing slowly or not up to standard. (diagram: show a trace waterfall for a series of 10 traces over the duration of the last half hour. Have a few content errors)</p>
 
-                <h3>6.6: MCP Server:</h3>
+                <h3 id="mcp-server-arch">6.6: MCP Server:</h3>
                 <p>The Retriever MCP server can be broken down into 3 main categories. These are the server infrastructure, the tool business logic, and how it integrates with the other layers of the retriever architecture.</p>
                 <p>This architecture consists of a Node js Express application with MCP protocol integration. The Open Telemetry SDK includes StreamableHTTPServerTransport and @modelcontextprotocol/sdk which are modules that allow the MCP server to communicate over the web. The server infrastructure allows for our MCP server to operate via Streamable HTTP. Streamable HTTP is a way of communication that allows for MCP clients to interact with MCP servers over HTTP. Using Streamable HTTP requires the MCP server to provide a single HTTP endpoint, which here is simply /mcp. Retriever's MCP server exposes three primary tools, these being list_services, get_traces, and get_service_health. These are accessible via the /mcp endpoint on port 3000.</p>
                 <p>list_services queries the Jaeger /api/v3/services endpoint through the Jaeger query service to return all active services that have had flowing trace data. This tool is useful when you do not know what services you are dealing with, or perhaps just want a list of them all.</p>
@@ -183,7 +267,7 @@
                 <p>get_service_health is a tool meant to gain comprehensive health metrics for a particular service, based on spanmetrics that Prometheus collects. It also filters trace data based on the service name, the time range, how the data will be formatted, and a trend comparison, which will compare the current results to a previous time period. For the data format, it can be one of the three following. JSON, which is the most optimized of the three for LLM consumption, Summary, which is human optimized and contains percentages and emoji indicators, and Detailed, which combines summary metrics with per-operation breakdowns. Since this tool is utilizing spanmetrics from Prometheus, it hits the Prometheus endpoint /api/v1/query, and it will include search key value pairs built from the input schema of the tool.</p>
                 <p>The MCP server will connect via the Jaeger Query to OpenSearch to get the requisite trace data needed. It will also directly query Prometheus for spanmetric data when utilizing the health tool. Given the example of a user identifying an issue in their IDE using Cursor. Here is an example of the flow of things when they ask "please identify the health of this service, and give me traces of the slowest errors" (diagram: that shows the following. 1. Up top, show Cursor, which is where the MCP client lies. 2. Draw an arrow down with the following text POST /mcp 3. The arrow should point to a figure called the Internet. 3. Internet points to the user VPC in AWS. Draw one overarching container. 4. Draw another container, which is the public subnet. Within this, draw another container. This contains the ALB. It will have two traits. 5. Terminates TLS at this location and goes from port 443 -> 3000 for the MCP. 6. Point outside of the ALB container through the public subnet into the private subnet container. 7. Point towards another container, which will contain the MCP server. 8. This should list that it is on port 3000. 9. From here, draw two separate arrows coming from the MCP server. One will go to the Jaeger Query container. This will be on port 16686. 10. This should contain another arrow pointing down to the OpenSearch container. This will be on port 9200. Show some drawings representing traces. 11. In the second arrow from the MCP, point towards the Prometheus container. This is on port 9090 and should have some drawing representing it containing spanmetrics.</p>
 
-                <h3>6.7: AlertManager:</h3>
+                <h3 id="alertmanager">6.7: AlertManager:</h3>
                 <p>AlertManager relies upon the spanmetrics from Prometheus to signal to users in a Slack channel of choice the following types of messages.</p>
                 <ol>
                     <li>ServiceError - This alerts on any error status of a span.</li>
@@ -194,15 +278,15 @@
                 </ol>
                 <p>AlertManager flows in the following way. Prometheus evaluates rules every 10 seconds. When the condition of any of the rules is true, an alert will fire. AlertManager will receive that alert. It will then group alerts according to their alert name and service name. It will then wait 10 seconds for related alerts to grab them effectively. Finally, these alerts will be sent to Slack, where users will receive the messages.</p>
 
-                <h3>6.8 Securing Retriever:</h3>
+                <h3 id="securing-retriever">6.8 Securing Retriever:</h3>
                 <p>…</p>
 
-                <h3>6.9: Packaging up in AWS:</h3>
+                <h3 id="packaging-aws">6.9: Packaging up in AWS:</h3>
                 <p>…</p>
 
-                <h2>7. Future Plans with Retriever</h2>
+                <h2 id="future-plans">7. Future Plans with Retriever</h2>
                 
-                <h3>7.1: Enhancing The MCP Server:</h3>
+                <h3 id="enhancing-mcp">7.1: Enhancing The MCP Server:</h3>
                 <p>The current setup for the Retriever MCP is tool-focused. And while it still provides impressive results, there is still ample room for the other primitives to be added in. Resources and Prompts will provide even more effective responses. Furthermore, JSON is the structure of the data that the MCP is being fed. It is effective, but TOON (Token-Oriented Object Notation) has become well known for efficient token usage for LLMS during the development of Retriever. It has been shown to increase token efficiency by upwards of 60% and even on the low end, it is safely 25% more effective. (9) Therefore, becoming more comfortable with TOON and including it in the MCP in the near future is a priority.</p>
 
                 <h2 id="team">Our Team</h2>
@@ -235,5 +319,74 @@
             </div>
         </section>
     </main>
+    <script>
+        // Handle dropdown toggle functionality
+        const tocToggles = document.querySelectorAll('.toc-toggle');
+        tocToggles.forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const parent = toggle.closest('.toc-parent');
+                if (parent) {
+                    parent.classList.toggle('expanded');
+                }
+            });
+        });
+
+        // Handle active section highlighting in TOC
+        const tocLinks = document.querySelectorAll('.toc-list a');
+        const sections = document.querySelectorAll('.case-study-container h1, .case-study-container h2, .case-study-container h3');
+        const caseStudyContent = document.querySelector('.case-study-content');
+
+        function updateActiveSection() {
+            if (!caseStudyContent) return;
+            
+            let current = '';
+            const scrollPosition = window.scrollY;
+            const contentTop = caseStudyContent.offsetTop;
+
+            sections.forEach(section => {
+                const sectionTop = contentTop + section.offsetTop;
+                if (scrollPosition + 200 >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                const href = link.getAttribute('href');
+                if (href && href === '#' + current) {
+                    link.classList.add('active');
+                    
+                    // Auto-expand parent if link is in a sub-section
+                    const sublistItem = link.closest('.toc-sublist');
+                    if (sublistItem) {
+                        const parent = sublistItem.closest('.toc-parent');
+                        if (parent && !parent.classList.contains('expanded')) {
+                            parent.classList.add('expanded');
+                        }
+                    }
+                    
+                    // Scroll TOC to show active link
+                    const tocSidebar = document.querySelector('.toc-sidebar');
+                    if (tocSidebar) {
+                        const linkTop = link.offsetTop;
+                        const linkHeight = link.offsetHeight;
+                        const sidebarHeight = tocSidebar.offsetHeight;
+                        const scrollTop = tocSidebar.scrollTop;
+                        
+                        if (linkTop < scrollTop) {
+                            tocSidebar.scrollTo({ top: linkTop - 20, behavior: 'smooth' });
+                        } else if (linkTop + linkHeight > scrollTop + sidebarHeight) {
+                            tocSidebar.scrollTo({ top: linkTop - sidebarHeight + linkHeight + 20, behavior: 'smooth' });
+                        }
+                    }
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveSection);
+        updateActiveSection(); // Initial call
+    </script>
 </body>
 </html>
