@@ -157,6 +157,8 @@ nav a:first-child img {
 .case-study-content {
     margin-top: 80px;
     padding-top: 20px;
+    display: flex;
+    position: relative;
 }
 
 .case-study-container {
@@ -164,6 +166,157 @@ nav a:first-child img {
     margin: 0 auto;
     padding: 0 20px 60px;
     line-height: 1.8;
+    flex: 1;
+    margin-left: 280px;
+}
+
+/* Table of Contents Sidebar */
+.toc-sidebar {
+    position: fixed;
+    left: 0;
+    top: 80px;
+    width: 250px;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding: 20px 15px;
+    background-color: #f8f9fa;
+    border-right: 1px solid #e0e0e0;
+    z-index: 100;
+}
+
+.toc-nav {
+    position: sticky;
+    top: 0;
+}
+
+.toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.toc-list > li {
+    margin-bottom: 8px;
+}
+
+.toc-list a {
+    display: block;
+    padding: 6px 12px;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9em;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.toc-list a:hover {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+.toc-list a.active {
+    background-color: #007bff;
+    color: white;
+    font-weight: 500;
+}
+
+/* Parent section with dropdown */
+.toc-parent {
+    margin-bottom: 8px;
+}
+
+.toc-parent-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.toc-parent-header > a {
+    flex: 1;
+}
+
+.toc-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    color: #666;
+    font-size: 0.8em;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+}
+
+.toc-toggle:hover {
+    background-color: #e9ecef;
+    color: #333;
+}
+
+.toc-toggle::before {
+    content: '▶';
+    font-size: 0.7em;
+    transition: transform 0.2s ease;
+}
+
+.toc-parent.expanded .toc-toggle::before {
+    transform: rotate(90deg);
+}
+
+/* Sub-sections (hidden by default) */
+.toc-sublist {
+    list-style: none;
+    margin: 0;
+    padding-left: 16px;
+    border-left: 2px solid #dee2e6;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, margin 0.3s ease, padding 0.3s ease;
+}
+
+.toc-parent.expanded .toc-sublist {
+    max-height: 1000px;
+    margin: 4px 0 0 0;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.toc-sublist li {
+    margin-bottom: 4px;
+}
+
+.toc-sublist a {
+    font-size: 0.85em;
+    padding: 4px 12px;
+    color: #888;
+}
+
+.toc-sublist a:hover {
+    color: #333;
+}
+
+.toc-sublist a.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Responsive: Hide TOC on smaller screens */
+@media (max-width: 1200px) {
+    .toc-sidebar {
+        display: none;
+    }
+    
+    .case-study-container {
+        margin-left: 0;
+    }
+}
+
+/* Smooth scrolling for TOC links */
+.toc-list a {
+    scroll-behavior: smooth;
 }
 
 .case-study-container h1 {
@@ -229,5 +382,62 @@ html {
 /* Offset for anchor links to account for fixed header */
 #case-study {
     scroll-margin-top: 80px;
+}
+
+/* Team Section Styles */
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px;
+    margin: 40px 0;
+    padding: 40px 0;
+}
+
+.team-member {
+    text-align: center;
+}
+
+.team-member img {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    aspect-ratio: 1;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.team-name {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+    margin: 8px 0 4px 0;
+}
+
+.team-role {
+    font-size: 1em;
+    color: #666;
+    margin: 0 0 4px 0;
+}
+
+.team-location {
+    font-size: 0.9em;
+    color: #888;
+    margin: 0;
+}
+
+/* Team Page Styles */
+.team-page-container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.team-page-container h1 {
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 40px;
+    color: #333;
 }
 
