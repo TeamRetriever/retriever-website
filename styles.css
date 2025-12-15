@@ -19,7 +19,7 @@ html {
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.6;
-    color: #1a1a1a;
+    color: var(--text-primary);
     background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
@@ -27,6 +27,11 @@ body {
     overflow-x: hidden;
     width: 100%;
     max-width: 100vw;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+[data-theme="dark"] body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
 }
 
 main {
@@ -79,6 +84,49 @@ main {
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
+/* Dark Mode Variables - Same Color Palette */
+[data-theme="dark"] {
+    /* Palette Colors - Same */
+    --palette-navy: #1b2249;
+    --palette-sky-blue: #4ec0f9;
+    --palette-green: #39b24a;
+    --palette-red: #ed4848;
+    --palette-pink: #ff85da;
+    
+    /* Primary Colors - Same */
+    --primary-blue: #4ec0f9;
+    --primary-blue-dark: #1b2249;
+    --primary-blue-light: #4ec0f9;
+    
+    /* Accent Colors - Same */
+    --accent-green: #39b24a;
+    --accent-red: #ed4848;
+    --accent-pink: #ff85da;
+    
+    /* Gradients - Same */
+    --gradient-primary: linear-gradient(135deg, #4ec0f9 0%, #1b2249 100%);
+    --gradient-blue: linear-gradient(135deg, #4ec0f9 0%, #1b2249 100%);
+    --gradient-cyan: linear-gradient(135deg, #4ec0f9 0%, #39b24a 100%);
+    --gradient-accent: linear-gradient(135deg, #ff85da 0%, #ed4848 100%);
+    
+    /* Text Colors - Inverted */
+    --text-primary: #f5f7fa;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    
+    /* Background Colors - Dark */
+    --bg-white: #0f172a;
+    --bg-light: #1e293b;
+    --bg-card: #1e293b;
+    --border-light: #334155;
+    
+    /* Shadows - Adjusted for dark mode */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+}
+
 /* Header & Navigation */
 header {
     position: sticky;
@@ -90,6 +138,11 @@ header {
     border-bottom: 1px solid var(--border-light);
     box-shadow: var(--shadow-sm);
     transition: all 0.3s ease;
+}
+
+[data-theme="dark"] header {
+    background: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid var(--border-light);
 }
 
 header:hover {
@@ -212,6 +265,55 @@ nav a:first-child img {
     vertical-align: middle;
     color: var(--text-secondary);
     transition: all 0.2s ease;
+}
+
+/* Dark Mode Toggle Button */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
+    padding: 0;
+}
+
+.theme-toggle:hover {
+    background: rgba(78, 192, 249, 0.1);
+    color: var(--primary-blue-light);
+    transform: translateY(-1px);
+}
+
+.theme-toggle svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.theme-toggle:hover svg {
+    transform: rotate(15deg);
+}
+
+/* Hide sun icon in light mode, moon icon in dark mode */
+.theme-toggle .sun-icon {
+    display: block;
+}
+
+.theme-toggle .moon-icon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .sun-icon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .moon-icon {
+    display: block;
 }
 
 /* GitHub icon hover - pink (#ff85da) */
@@ -430,6 +532,11 @@ nav a:first-child img {
     word-wrap: break-word;
 }
 
+[data-theme="dark"] .instruction-step pre {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    border: 1px solid rgba(78, 192, 249, 0.2);
+}
+
 .instruction-step code {
     font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
     font-size: 0.9em;
@@ -453,6 +560,11 @@ nav a:first-child img {
     border-radius: 16px;
     border: 1px solid rgba(78, 192, 249, 0.2);
     box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .help-section {
+    background: linear-gradient(135deg, rgba(78, 192, 249, 0.15) 0%, rgba(57, 178, 74, 0.15) 100%);
+    border: 1px solid rgba(78, 192, 249, 0.3);
 }
 
 .help-section h2 {
@@ -853,6 +965,10 @@ nav a:first-child img {
     box-shadow: var(--shadow-sm);
 }
 
+[data-theme="dark"] .diagram-placeholder {
+    background: linear-gradient(135deg, rgba(78, 192, 249, 0.1) 0%, rgba(255, 133, 218, 0.1) 100%);
+}
+
 /* Offset for anchor links to account for fixed header */
 #case-study {
     scroll-margin-top: 80px;
@@ -891,9 +1007,13 @@ nav a:first-child img {
     aspect-ratio: 1;
     margin-bottom: 20px;
     box-shadow: var(--shadow-lg);
-    border: 3px solid white;
+    border: 3px solid var(--bg-white);
     transition: all 0.3s ease;
     box-sizing: border-box;
+}
+
+[data-theme="dark"] .team-member img {
+    border: 3px solid var(--bg-card);
 }
 
 .team-member:hover img {
