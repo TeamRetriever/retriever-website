@@ -31,7 +31,7 @@ body {
 }
 
 [data-theme="dark"] body {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    background: #1b2249;
 }
 
 main {
@@ -141,7 +141,7 @@ header {
 }
 
 [data-theme="dark"] header {
-    background: rgba(15, 23, 42, 0.95);
+    background: rgba(27, 34, 73, 0.95);
     border-bottom: 1px solid var(--border-light);
 }
 
@@ -884,11 +884,19 @@ nav a:first-child img {
     overflow-wrap: break-word;
 }
 
+[data-theme="dark"] .case-study-container h1 {
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+    background-clip: unset;
+    color: var(--primary-blue-light);
+}
+
 .case-study-container h2 {
     font-size: clamp(1.5rem, 5vw, 2.25rem);
     margin-top: 56px;
     margin-bottom: 24px;
-    color: var(--text-primary);
+    color: var(--accent-green);
     border-bottom: 3px solid;
     border-image: var(--gradient-blue) 1;
     padding-bottom: 12px;
@@ -902,7 +910,7 @@ nav a:first-child img {
     font-size: 1.75rem;
     margin-top: 40px;
     margin-bottom: 20px;
-    color: var(--text-primary);
+    color: var(--accent-pink);
     font-weight: 700;
 }
 
@@ -910,7 +918,7 @@ nav a:first-child img {
     font-size: 1.375rem;
     margin-top: 32px;
     margin-bottom: 16px;
-    color: var(--text-primary);
+    color: var(--accent-red);
     font-weight: 600;
 }
 
