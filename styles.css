@@ -39,6 +39,7 @@ main {
     max-width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
+    padding-top: 80px;
 }
 
 /* Modern Color Palette */
@@ -129,8 +130,10 @@ main {
 
 /* Header & Navigation */
 header {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
@@ -154,9 +157,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 1rem clamp(1rem, 4vw, 2rem);
+    padding: 1rem clamp(1rem, 2vw, 1.5rem);
     width: 100%;
     box-sizing: border-box;
 }
