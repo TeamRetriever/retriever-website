@@ -874,10 +874,7 @@ nav a:first-child img {
     font-size: clamp(2rem, 6vw, 3rem);
     margin-bottom: 32px;
     margin-top: 0;
-    background: var(--gradient-blue);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--primary-blue-dark);
     font-weight: 800;
     letter-spacing: -0.02em;
     word-wrap: break-word;
@@ -885,10 +882,6 @@ nav a:first-child img {
 }
 
 [data-theme="dark"] .case-study-container h1 {
-    background: none;
-    -webkit-background-clip: unset;
-    -webkit-text-fill-color: unset;
-    background-clip: unset;
     color: var(--primary-blue-light);
 }
 
@@ -896,7 +889,7 @@ nav a:first-child img {
     font-size: clamp(1.5rem, 5vw, 2.25rem);
     margin-top: 56px;
     margin-bottom: 24px;
-    color: var(--accent-green);
+    color: var(--primary-blue-dark);
     border-bottom: 3px solid;
     border-image: var(--gradient-blue) 1;
     padding-bottom: 12px;
@@ -906,20 +899,32 @@ nav a:first-child img {
     overflow-wrap: break-word;
 }
 
+[data-theme="dark"] .case-study-container h2 {
+    color: var(--primary-blue-light);
+}
+
 .case-study-container h3 {
     font-size: 1.75rem;
     margin-top: 40px;
     margin-bottom: 20px;
-    color: var(--accent-pink);
+    color: var(--primary-blue-dark);
     font-weight: 700;
+}
+
+[data-theme="dark"] .case-study-container h3 {
+    color: var(--primary-blue-light);
 }
 
 .case-study-container h4 {
     font-size: 1.375rem;
     margin-top: 32px;
     margin-bottom: 16px;
-    color: var(--accent-red);
+    color: var(--primary-blue-dark);
     font-weight: 600;
+}
+
+[data-theme="dark"] .case-study-container h4 {
+    color: var(--primary-blue-light);
 }
 
 .case-study-container p {
@@ -975,6 +980,87 @@ nav a:first-child img {
 
 [data-theme="dark"] .diagram-placeholder {
     background: linear-gradient(135deg, rgba(78, 192, 249, 0.1) 0%, rgba(255, 133, 218, 0.1) 100%);
+}
+
+/* Diagram image container with light background for visibility */
+.diagram-image-container {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 24px auto;
+    box-shadow: var(--shadow-md);
+    max-width: 50%;
+    text-align: center;
+}
+
+[data-theme="dark"] .diagram-image-container {
+    background: #ffffff;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 24px auto;
+    box-shadow: var(--shadow-md);
+    max-width: 50%;
+    text-align: center;
+}
+
+.diagram-image-container img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Larger diagram container for important diagrams */
+.diagram-image-container-large {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 24px auto;
+    box-shadow: var(--shadow-md);
+    max-width: 100%;
+    text-align: center;
+}
+
+[data-theme="dark"] .diagram-image-container-large {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 24px auto;
+    box-shadow: var(--shadow-md);
+    max-width: 100%;
+    text-align: center;
+}
+
+.diagram-image-container-large img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Medium diagram container for 75% width */
+.diagram-image-container-medium {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 24px auto;
+    box-shadow: var(--shadow-md);
+    max-width: 75%;
+    text-align: center;
+}
+
+[data-theme="dark"] .diagram-image-container-medium {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 24px auto;
+    box-shadow: var(--shadow-md);
+    max-width: 75%;
+    text-align: center;
+}
+
+.diagram-image-container-medium img {
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
 /* Offset for anchor links to account for fixed header */
