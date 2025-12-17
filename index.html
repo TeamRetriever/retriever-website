@@ -256,7 +256,9 @@
                 </div>
 
                 <h2 id="architecture">7. Architecture</h2>
-                <p class="diagram-placeholder">(diagram: our full architecture design plus a high-level description)</p>
+                <div class="diagram-image-container-medium image-modal-trigger">
+                    <img src="assets/diagrams/retriever-architecture.png" alt="Retriever Architecture Diagram" class="modal-image">
+                </div>
                 <p>When a user runs the setup process in the CLI, Retriever uses Terraform to provision its infrastructure and start running its services:</p>
 
                 <h3 id="jaeger-collector">7.1 Jaeger Collector</h3>
@@ -559,6 +561,63 @@
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
                 html.setAttribute('data-theme', newTheme);
                 localStorage.setItem('theme', newTheme);
+            });
+        })();
+
+        // Image Modal Functionality
+        (function() {
+            const modal = document.createElement('div');
+            modal.className = 'image-modal';
+            modal.innerHTML = `
+                <div class="image-modal-overlay"></div>
+                <div class="image-modal-content">
+                    <button class="image-modal-close" aria-label="Close modal">&times;</button>
+                    <img src="" alt="" class="image-modal-img">
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            const modalImg = modal.querySelector('.image-modal-img');
+            const overlay = modal.querySelector('.image-modal-overlay');
+            const closeBtn = modal.querySelector('.image-modal-close');
+
+            function openModal(imgSrc, imgAlt) {
+                modalImg.src = imgSrc;
+                modalImg.alt = imgAlt;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+
+            // Make all images in diagram containers clickable
+            const diagramContainers = document.querySelectorAll('.diagram-image-container, .diagram-image-container-medium, .diagram-image-container-large, .image-modal-trigger');
+            diagramContainers.forEach(container => {
+                const img = container.querySelector('img');
+                if (img) {
+                    container.style.cursor = 'pointer';
+                    container.addEventListener('click', () => {
+                        openModal(img.src, img.alt);
+                    });
+                }
+            });
+
+            overlay.addEventListener('click', closeModal);
+            closeBtn.addEventListener('click', closeModal);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closeModal();
+                }
             });
         })();
     </script>
