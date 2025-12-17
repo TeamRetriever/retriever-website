@@ -967,6 +967,16 @@ nav a:first-child img {
     border-bottom-color: var(--accent-green);
 }
 
+.case-study-container a.link-blue {
+    color: var(--primary-blue-light);
+    border-bottom-color: transparent;
+}
+
+.case-study-container a.link-blue:hover {
+    color: var(--primary-blue-light);
+    border-bottom-color: var(--primary-blue-light);
+}
+
 .diagram-placeholder {
     font-style: italic;
     color: var(--text-muted);

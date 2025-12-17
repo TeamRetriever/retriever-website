@@ -86,10 +86,6 @@
                 <h1 id="what-is-retriever">1. What is Retriever?</h1>
                 <p>Retriever is an open-source, self-hosted observability service that puts valuable telemetry data in the hands of small teams. If you're running your application in AWS, Retriever can be ready to collect and display data in a few minutes. AI agents can use the Retriever MCP server to query and analyze data, so that you can diagnose and solve problems without having to alt-tab out of your IDE.</p>
 
-                <div class="diagram-image-container-large">
-                    <img src="assets/diagrams/retriever-high-level.png" alt="Retriever High Level Architecture">
-                </div>
-
                 <h2 id="modern-observability">2. Modern Observability</h2>
                 
                 <h3 id="what-is-observability">2.1 What is Observability?</h3>
@@ -104,7 +100,7 @@
                     <img src="assets/diagrams/app-generating-telemetry.png" alt="App Generating Telemetry">
                 </div>
                 
-                <p>Once we're collecting data, we need a place to store it. Telemetry data has specialized storage requirements: new data is written to the database frequently and continuously, old data never needs to be updated, and very large volumes of data can accumulate over time. Specialized databases are needed to meet these requirements; we discuss some of the options for trace storage in section 5.2.</p>
+                <p>Once we're collecting data, we need a place to store it. Telemetry data has specialized storage requirements: new data is written to the database frequently and continuously, old data never needs to be updated, and very large volumes of data can accumulate over time. Specialized databases are needed to meet these requirements; we discuss some of the options for trace storage in <a href="#choosing-backend" class="link-blue">section 6.2</a>.</p>
                 
                 <p>Now that all that telemetry is stored for querying when something goes awry, we need a way to visualize the telemetry--turning it from large JSON blobs into something that's easy to visually parse--so that we can easily use the telemetry to trace the issue to its source.</p>
                 
@@ -113,11 +109,19 @@
                 <h3 id="why-trace-first">2.3 Why Trace-First Telemetry?</h3>
                 <p>Metrics and logs each play an important role in telemetry. Metrics are excellent for aggregating data points, like CPU utilization, over time, which helps engineers identify anomalies in the production environment. But a metric tells you that something is wrong, not where; when an error rate spikes, without other context, metrics generally can't pinpoint the culprit service. Meanwhile, logs usefully capture detailed, human-readable information about individual events. That said, correlating individual logs to reconstruct a single request's path can be a tedious task even in a monolithic architecture.</p>
                 
+                <div class="diagram-image-container-large">
+                    <img src="assets/diagrams/visualizer-jaeger.png" alt="Jaeger UI Trace Waterfall">
+                </div>
+                
                 <p>Given the complexity of modern applications, traces emerged to address the observability challenges introduced by distributed systems; they stitch together all the sub-requests associated with a single incoming request so that developers can understand every step in the lifecycle of a request as it hops from service to service. A single trace is made of multiple spans, with the first span representing the root span and underlying spans representing a process that occurs during the parent request. Traces capture the complete journey of a request as it flows through multiple services, and therefore allow for powerful root cause analysis across a distributed system.</p>
                 
                 <p>Traces enable root cause analysis, but finding the relevant trace among thousands still requires manual investigation. This is where AI agents can help—if they can access the trace data.</p>
 
                 <h3 id="agentic-ai-observability">2.4 Agentic AI in Observability</h3>
+                
+                <div class="diagram-image-container-medium">
+                    <img src="assets/diagrams/retriever-high-level.png" alt="Retriever High Level Architecture">
+                </div>
                 
                 <p>A modern approach to observability integrates AI agents. Utilizing AI to debug in production previously required iterations of combing through recent telemetry data and reasoning about which data was important context, then copy/pasting it into a chat with the agent, followed by iterations of narrowing or widening the context to eventually figure out the root cause. Finally, the bug fix is written and the solution pushed to prod.</p>
                 
@@ -213,13 +217,15 @@
                 <p>From the beginning, we planned for Retriever to be a service users would self-host in AWS. Our first big infrastructure decision was: where in AWS? Retriever could deploy in its own VPC, separate from the VPC the user's application was running in. The user would send their telemetry data to some public endpoint provided by Retriever.</p>
                 <p>There was a lot to like about this strategy. It compartmentalized Retriever from the user's other AWS services. It didn't require that the user have any particular infrastructure set up already. In fact, it didn't require that the user run their application in AWS at all - the application could run anywhere, in a cloud or on-premises, and still use Retriever.</p>
                 <p>The downside was security. Since telemetry data was traveling over the public internet, it needed to be encrypted and connections needed to be authenticated. The OpenTelemetry standard mandates MTLS (Mutual Transport Layer Security) for this, which the user would need to configure for their own application. Security also adds compute time to every request; since telemetry collection involves a continuous stream of requests, this adds up.</p>
+                
+                <div class="diagram-image-container-medium">
+                    <img src="assets/diagrams/two-vpcs.png" alt="Retriever in Separate VPCs">
+                </div>
+                
                 <p>To avoid these problems, we decided to deploy Retriever such that the Jaeger collector ran in the same private subnet as the user's telemetry-emitting service. Here, the telemetry data never leaves the subnet, meaning we don't need to worry about a secure connection. Users need to provide the VPC and subnets, but they don't have to worry about configuring MTLS.</p>
                 
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/one-vpc.png" alt="Retriever in User's VPC">
-                </div>
-                <div class="diagram-image-container-medium">
-                    <img src="assets/diagrams/two-vpcs.png" alt="Retriever in Separate VPCs">
                 </div>
 
                 <h3 id="orchestrating-containers">6.6 Orchestrating Containers</h3>
@@ -244,16 +250,17 @@
                 
                 <p>The Retriever MCP went through various iterations with its tools. At first, get_traces was two separate tools: get_traces and get_errors. get_service_health was intended to be one of two tools focused on the health of a service, with the second being a compare_services tool to be able to compare two different periods of time and the service's state. After reflection, we determined that each pair could be merged together for a more fully fleshed out and effective tooling. Ultimately, it seemed better for a user to have to do fewer tool calls and be able to form the shape of the call to more accurately reflect their inquiries.</p>
                 <p>It became quickly apparent that Data Distillation would be a major component of the MCP server to account for. When working with traces as a structure across large services, these objects that are returned can become immensely large in size. Early in the tool development stage, get_traces had no distillation, and even one single trace would go over the limit for an MCP host like Cursor. The distillation method that the Retriever MCP incorporates was able to shrink the size of the object upwards of 90-95%. All while preserving critical attributes necessary for appropriate responses.</p>
-                <p>This distillation was accomplished by utilizing the structure of the Jaeger v3 api. The documentation for this api shows the structure of trace data, and this allowed for business logic to iterate through nested objects to relevant data for particular attributes. For example with a single trace if we wanted to grab the span events from it you would iterate through the top level resourceSpans then iterate through scopeSpans, then you can access spans. For a particular span you can then access events. All relevant properties are accessed in the same way. Each individual property is small in isolation and because of this exponential decrease in volume of data being returned, trace data is allowed to be queried and used for troubleshooting purposes without any issues related to speed or effectiveness.</p>
                 
-                <p>An additional decision that was made pertained to handling the calculation logic of date and time-related data. Both the Jaeger and Prometheus APIs required specific time formatting, and therefore, the option was available to leave calculating that time to be more human-readable to the LLM. For a myriad of factors, LLMs tend to struggle with time (8). And through testing, this also reared its head, often hallucinating improper times and dates. Therefore, business logic was added in for the MCP to handle this logic so LLM models would not have to process it.</p>
-
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/before-data-distillation.png" alt="Before Data Distillation">
                 </div>
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/after-data-distillation.png" alt="After Data Distillation">
                 </div>
+                
+                <p>This distillation was accomplished by utilizing the structure of the Jaeger v3 api. The documentation for this api shows the structure of trace data, and this allowed for business logic to iterate through nested objects to relevant data for particular attributes. For example with a single trace if we wanted to grab the span events from it you would iterate through the top level resourceSpans then iterate through scopeSpans, then you can access spans. For a particular span you can then access events. All relevant properties are accessed in the same way. Each individual property is small in isolation and because of this exponential decrease in volume of data being returned, trace data is allowed to be queried and used for troubleshooting purposes without any issues related to speed or effectiveness.</p>
+
+                <p>An additional decision that was made pertained to handling the calculation logic of date and time-related data. Both the Jaeger and Prometheus APIs required specific time formatting, and therefore, the option was available to leave calculating that time to be more human-readable to the LLM. For a myriad of factors, LLMs tend to struggle with time (8). And through testing, this also reared its head, often hallucinating improper times and dates. Therefore, business logic was added in for the MCP to handle this logic so LLM models would not have to process it.</p>
 
                 <h2 id="architecture">7. Architecture</h2>
                 <div class="diagram-image-container-medium image-modal-trigger">
@@ -263,23 +270,19 @@
 
                 <h3 id="jaeger-collector">7.1 Jaeger Collector</h3>
                 <p>The Jaeger Collector is the endpoint for the user's trace data. As spans arrive, the Collector derives aggregated spanmetrics that record request counts, error rates, and request durations (RED metrics). Rather than sending each span directly to OpenSearch, the Collector sends data in periodic batches to reduce network traffic. The spanmetrics are exposed on a port to be scraped by Prometheus.</p>
-                
-                <div class="diagram-image-container-medium">
-                    <img src="assets/diagrams/collector-processor-exporter.png" alt="Collector, Processor, and Exporter">
-                </div>
 
                 <h3 id="opensearch">7.2 OpenSearch</h3>
                 <p>OpenSearch stores trace data, writing new data in bulk as it receives each batch from the Collector. Each span is stored as its own document.</p>
                 <p>When it's time to query this data, OpenSearch uses inverted indices(9) to quickly find the desired traces and spans. Indices are partitioned by day; because traces are naturally grouped by time and queries typically focus on recent data, this partitioning strategy doesn't slow down querying.</p>
                 
                 <div class="diagram-image-container-medium">
-                    <img src="assets/diagrams/forward-index.png" alt="Forward Index Diagram">
-                </div>
-                <p style="max-width: 75%; margin: 12px auto 24px; font-style: italic; color: var(--text-secondary); text-align: left;">Forward Indexing Allows for Fast, Cheap Data Ingestion and Storage</p>
-                <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/inverted-index.png" alt="Inverted Index Diagram">
                 </div>
                 <p style="max-width: 75%; margin: 12px auto 24px; font-style: italic; color: var(--text-secondary); text-align: left;">Inverted Indexing Allows for More Queryable Telemetry</p>
+                <div class="diagram-image-container-medium">
+                    <img src="assets/diagrams/forward-index.png" alt="Forward Index Diagram">
+                </div>
+                <p style="max-width: 75%; margin: 12px auto 24px; font-style: italic; color: var(--text-secondary); text-align: left;">Forward Indexing Allows for Fast, Cheap Data Ingestion and Storage</p>
 
                 <h3 id="prometheus">7.3 Prometheus and AlertManager</h3>
                 <p>Prometheus stores metric data, scraping spanmetrics from the Jaeger Collector at short intervals, and takes responsibility for alerting. In Retriever, Prometheus is configured to fire alerts based on general heuristics, such as a service that returns an error more than 5% of the time. These alerts are sent to AlertManager, which in turn delivers them to a user-specified endpoint.</p>
@@ -293,10 +296,6 @@
                 </div>
                 
                 <p>The Jaeger UI runs as part of the query service. Users can access the dashboard over the public internet via a load balancer. From there, they can search and filter to find the data they want, examine individual traces and spans in detail, and view spanmetrics pulled from Prometheus.</p>
-                
-                <div class="diagram-image-container-large">
-                    <img src="assets/diagrams/visualizer-jaeger.png" alt="Jaeger UI Trace Waterfall">
-                </div>
 
                 <h3 id="mcp-server-arch">7.5 MCP Server</h3>
                 <p>The Retriever MCP server is a TypeScript application using Express and the Model Context Protocol SDK. Because the MCP is designed to run in the cloud, it communicates over StreamableHTTP, the standard protocol for remote client/MCP communication. Clients connect to the MCP through the same load balancer that directs users to the Jaeger UI, with a POST request to the path /mcp.</p>
