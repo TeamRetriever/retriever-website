@@ -100,7 +100,7 @@
                     <img src="assets/diagrams/app-generating-telemetry.png" alt="App Generating Telemetry">
                 </div>
                 
-                <p>Once we're collecting data, we need a place to store it. Telemetry data has specialized storage requirements: new data is written to the database frequently and continuously, old data never needs to be updated, and very large volumes of data can accumulate over time. Specialized databases are needed to meet these requirements; we discuss some of the options for trace storage in <a href="#choosing-backend" class="link-blue">section 6.2</a>.</p>
+                <p>Once we're collecting data, we need a place to store it. Telemetry data has specialized storage requirements: new data is written to the database frequently and continuously, old data never needs to be updated, and very large volumes of data can accumulate over time. Specialized databases are needed to meet these requirements; we discuss some of the options for trace storage in <a href="#choosing-datastore" class="link-blue">section 6.3</a>.</p>
                 
                 <p>Now that all that telemetry is stored for querying when something goes awry, we need a way to visualize the telemetry--turning it from large JSON blobs into something that's easy to visually parse--so that we can easily use the telemetry to trace the issue to its source.</p>
                 
@@ -113,9 +113,7 @@
                     <img src="assets/diagrams/visualizer-jaeger.png" alt="Jaeger UI Trace Waterfall">
                 </div>
                 
-                <p>Given the complexity of modern applications, traces emerged to address the observability challenges introduced by distributed systems; they stitch together all the sub-requests associated with a single incoming request so that developers can understand every step in the lifecycle of a request as it hops from service to service. A single trace is made of multiple spans, with the first span representing the root span and underlying spans representing a process that occurs during the parent request. Traces capture the complete journey of a request as it flows through multiple services, and therefore allow for powerful root cause analysis across a distributed system.</p>
-                
-                <p>Traces enable root cause analysis, but finding the relevant trace among thousands still requires manual investigation. This is where AI agents can help—if they can access the trace data.</p>
+                <p>Given the complexity of modern applications, traces emerged to address the observability challenges introduced by distributed systems; they stitch together all the sub-requests associated with a single incoming request so that developers can understand every step in the lifecycle of a request as it hops from service to service. A single trace is made of multiple spans, with the first span representing the root span and underlying spans representing a process that occurs during the parent request. Traces capture the complete journey of a request as it flows through multiple services, and therefore allow for powerful root cause analysis across a distributed system – but finding the relevant trace among thousands still requires manual investigation. This is where AI agents can help—if they can access the trace data.</p>
 
                 <h3 id="agentic-ai-observability">2.4 Agentic AI in Observability</h3>
                 
@@ -155,7 +153,7 @@
                 <h3 id="what-retriever-offers">4.1 What Retriever Offers</h3>
                 <p>Running the Retriever command-line tool will spin up a complete observability platform in AWS, ready to accept, store, and display telemetry data.</p>
                 <p>Retriever is focused on trace data and does not accept traditional logs or metrics. Instead, users can instrument their application to emit log data in the form of span events embedded within traces. Retriever also derives metrics, such as error rates, from the trace data it receives. Users can configure alerts based on these metrics to be sent to a Slack channel, email address, or wherever is most convenient.</p>
-                <p>Users can query, filter, and search their trace data in a web dashboard. Their AI agents can do the same via the Retriever MCP server. A simple configuration in Cursor to connect the MCP, a prompt like "Cursor, are there any errors in our recent telemetry?" and it has tools to read recent trace data to pinpoint problems and suggest fixes.</p>
+                <p>Users can query, filter, and search their trace data in a web dashboard. Their AI agents can do the same via the Retriever MCP server. When the user prompts their Cursor agent to examine telemetry data, the agent can use Cursor's connection to the MCP server to freely query trace data, gathering the evidence it needs to pinpoint problems and suggest fixes.</p>
 
                 <h3 id="intended-user">4.2 The Intended User</h3>
                 <p>We built Retriever for small teams running their applications in AWS. Retriever is for teams that want:</p>
@@ -186,13 +184,12 @@
                 <p>While the observability field recognizes three primary types of telemetry signals (as a recap - logs, metrics, and traces), it's not a given that a solution should support all three. Each signal must be ingested, stored, and queried in a different way, typically by different services; signals must also be correlated so that users can know, for instance, what logs belong to what traces. The question for us, then, was whether focusing on one or two signals could offer our users a more streamlined experience without sacrificing functionality.</p>
                 <p>As we researched open-source observability tools, we found ways to work with traces without sacrificing the descriptive power of logs or the high-level digestibility of metrics. By focusing solely on trace data, we were able to simplify our architecture, reduce infrastructure costs, and offer the user a more streamlined experience.</p>
 
-                <h3 id="choosing-backend">6.2 Choosing A Backend</h3>
-                <p>While it's certainly possible to build a trace backend from scratch, that wasn't the focus of Retriever. We wanted to take one of the many high-quality open-source options and package it with simple automated deployment and MCP functionality. After discarding some clearly unsuitable options like the ELK stack and GreptimeDB, we were left with two candidates: Grafana and Jaeger.</p>
+                <h3 id="choosing-backend">6.2 Choosing A Stack</h3>
+                <p>With traces in mind, we set out to choose the set of components that would form our trace observability system. While it was certainly possible to build our own services to handle collection, storage, querying, and visualization, that wasn't the focus of Retriever. We wanted to draw from the many high-quality open-source options and package them with simple automated deployment and MCP functionality. After discarding some clearly unsuitable options like the ELK stack and GreptimeDB, we were left with two candidates: Grafana and Jaeger.</p>
                 
                 <h4>Grafana</h4>
-                <p>The Grafana stack is an ecosystem of services that handle different telemetry signals, with Grafana itself as the visualization service that pulls all of the telemetry data together. Trace storage is handled with the Tempo service.</p>
-                <p>Tempo uses AWS S3 to store trace data cheaply. The Grafana dashboard is a very flexible visualization tool. Using Grafana would also allow us to expand Retriever to handle the other telemetry signals in the future.</p>
-                <p>However, there was a red flag: trace querying. Originally, it wasn't possible to query traces at all in Tempo; you had to find a trace id in a metric or log, then look up that id in Tempo. Tempo has recently added TraceQL for true trace querying, but this is a young feature that is still being updated, and not yet a good foundation for a dedicated trace observability service like Retriever.</p>
+                <p>The Grafana stack is an ecosystem of services that handle different telemetry signals, with Grafana itself as the visualization service that pulls all of the telemetry data together. Grafana's draw was flexibility. The dashboard allows users a lot of freedom to customize their UI to their needs. On a project scope level, Grafana would also allow us to expand Retriever to handle the other telemetry signals in the future.</p>
+                <p>However, Grafana's trace service, Tempo, didn't meet our needs. Early releases of Tempo didn't allow users to query traces at all; they had to find a trace id in a metric or log, then look up that id in Tempo. Tempo has recently added TraceQL for true trace querying, but this is a young feature that is still being updated, and not yet a good foundation for a dedicated trace observability service like Retriever.</p>
                 
                 <h4>Jaeger</h4>
                 <p>Jaeger is an open-source solution purpose-built for trace data. It's mature and widely adopted, but not out of date - in fact, Jaeger v2 was released in late 2024.</p>
@@ -229,38 +226,33 @@
                 </div>
 
                 <h3 id="orchestrating-containers">6.6 Orchestrating Containers</h3>
-                <p>AWS offers a suite of options for deploying containerized services. We quickly ruled out EKS (Elastic Kubernetes Service). Kubernetes is a useful and powerful way of orchestrating containers in production, but it's overbuilt for Retriever's needs. Retriever only involves a handful of containers, none of which we expect to scale dramatically. Kubernetes' features come at the cost of high operational complexity that, in the long run, our users would be responsible for handling.</p>
-                <p>ECS (Elastic Container Service) is much simpler to set up and maintain, while still offering the features necessary for a production application. We considered deploying ECS services over a cluster of EC2 (Elastic Cloud Compute) instances, which would let us constrain user costs to the cost of the provisioned instances. However, this comes with its own maintenance burden for the user; for instance, the user would have to manually install security updates on their instances over time.</p>
+                <p>Now that we decided where to deploy, we turned to how to deploy. We needed an orchestration solution that was cost-effective and easy to maintain. AWS offers several options, and we evaluated them against these two criteria. We quickly ruled out EKS (Elastic Kubernetes Service). Kubernetes is a useful and powerful way of orchestrating containers in production, but it's overbuilt for Retriever's needs. Retriever only involves a handful of containers, none of which we expect to scale dramatically. Kubernetes' features come at the cost of high operational complexity that, in the long run, our users would inherit.</p>
+                <p>ECS (Elastic Container Service) offered the simplicity we wanted. The remaining question was whether to run ECS on self-managed EC2 instances or on Fargate, AWS's serverless container platform. EC2 would give users predictable costs tied to provisioned instance capacity, but it shifts maintenance burden (like manually installing security updates) onto them as well. Fargate costs roughly 10-20% more at equivalent compute, but eliminates that operational overhead entirely.</p>
                 <p>In line with Retriever's focus on user convenience, we opted to use AWS's serverless container offering, Fargate, instead. We expect Fargate to be slightly more expensive, but it makes Retriever much more of a "set and forget" service, with minimal maintenance needs.</p>
 
                 <h3 id="mcp-implementation">6.7 MCP Implementation</h3>
-                <p>Overall, what did we have to problem solve here</p>
-                <ul>
-                    <li>Why a few powerful tools + intended workflow for agents</li>
-                    <li>Time hallucination, use of `lookback` for the agent, but translation to start_time and end_time via the server</li>
-                    <li>Selective context extraction</li>
-                    <li>Building the request to Jaeger/Prometheus (can be brief, specify the timeframe</li>
-                    <li>Server-side filtering for successful (not supported by the backend)</li>
-                    <li>Data transformation</li>
-                    <li>Reducing verbose OTLP structure to just the relevant ids, tags, and status codes</li>
-                </ul>
-                
-                <p>We knew that we wanted to provide an MCP that allowed for Cursor to seamlessly and securely integrate into the typical debugging workflow. One initial decision we faced was determining which of two Jaeger Query APIs to integrate: the leaner v1, which returns trace data that is 4x smaller, or the better-documented v3, which returns larger, data-rich traces.</p>
-                <p>The v3 API requires time fields</p>
-                
-                <p>The Retriever MCP went through various iterations with its tools. At first, get_traces was two separate tools: get_traces and get_errors. get_service_health was intended to be one of two tools focused on the health of a service, with the second being a compare_services tool to be able to compare two different periods of time and the service's state. After reflection, we determined that each pair could be merged together for a more fully fleshed out and effective tooling. Ultimately, it seemed better for a user to have to do fewer tool calls and be able to form the shape of the call to more accurately reflect their inquiries.</p>
-                <p>It became quickly apparent that Data Distillation would be a major component of the MCP server to account for. When working with traces as a structure across large services, these objects that are returned can become immensely large in size. Early in the tool development stage, get_traces had no distillation, and even one single trace would go over the limit for an MCP host like Cursor. The distillation method that the Retriever MCP incorporates was able to shrink the size of the object upwards of 90-95%. All while preserving critical attributes necessary for appropriate responses.</p>
-                
+                <p>We wanted the Retriever MCP to seamlessly and securely integrate into the typical debugging workflow via an agent like Cursor. To give it access to the trace data that enables debugging, we had to integrate with the Jaeger Query API. When determining between the leaner v1 Jaeger Query API, which returns trace data that is 4x smaller, or the better-documented v3, which returns larger, data-rich traces, we went with v3, prioritizing better support and traces that are structured to align fully with the OTLP.</p>
+                <p><strong>Tool Count vs Tool Flexibility</strong></p>
+                <p>We started by developing many single-purpose tools for our MCP (e.g. `get_error_traces`, 'get_recent_traces`, `compare_traces`, etc). While the purpose of each tool was clear and their development was straightforward, we found that the "LLM overhead" associated with exposing so many tools to the model was too high. Each tool exposure increases context window consumption, and has to be held "in memory" by the model throughout the conversation, increasing the chance of incorrect tool selection and unnecessary back-and-forth.</p>
+                <p>We found that building just a few highly customizable tools, like `get_traces`, which has the ability to query for one or more traces that match many criteria, allowed for fewer tool calls during debugging; one tool call for "traces from 'checkout' with error codes in the last 5 minutes" instead of chaining together 3 or 4 calls of single-purpose tools for the same information.</p>
+                <p><strong>Selective Context Extraction</strong></p>
+                <p>Reducing tool count was only part of the optimization — we also had to minimize the data returned by each tool call. A common challenge when working with LLMs is efficiently managing the context window: giving the model the useful data it needs to do root cause analysis while not blowing up the context window and bringing the chat to an abrupt halt. In our testing, a typical span from the v3 API was approximately 2.5kb, or ~800 tokens. A single request that touches, say, 5 or 6 services has a trace as large as 4000 tokens. Our MCP distills the Jaeger API response to about 500 tokens, more than an 85% reduction in tokens, significantly optimizing interactions with an LLM.</p>
+                <p>Prior to forwarding Jaeger's response to the LLM, our server builds a trace summary optimized for debugging, keeping only a handful of attributes, like traceId, operation, and status, plus error details and relevant tags. That means we drop token-heavy data like internal instrumentation metadata, unrelated trace flags, resource attributes beyond service name.  Similarly, the MCP condenses 8 separate Prometheus API responses into a single unified object that compares the returned metrics to given thresholds to illustrate the health of the system.</p>
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/before-data-distillation.png" alt="Before Data Distillation">
                 </div>
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/after-data-distillation.png" alt="After Data Distillation">
                 </div>
-                
-                <p>This distillation was accomplished by utilizing the structure of the Jaeger v3 api. The documentation for this api shows the structure of trace data, and this allowed for business logic to iterate through nested objects to relevant data for particular attributes. For example with a single trace if we wanted to grab the span events from it you would iterate through the top level resourceSpans then iterate through scopeSpans, then you can access spans. For a particular span you can then access events. All relevant properties are accessed in the same way. Each individual property is small in isolation and because of this exponential decrease in volume of data being returned, trace data is allowed to be queried and used for troubleshooting purposes without any issues related to speed or effectiveness.</p>
+                <p><strong>Time Hallucinations</strong></p>
+                <p>When querying Jaeger, the v3 API requires `start_time` and `end_time` parameters. Just like a human would determine the appropriate arguments for a tool call, the model is responsible for providing values when a user prompts, for example, "find any traces with a 500 status in the last 15 minutes." However, models consistently struggled to produce accurate timestamps, even with hard-coding the current time.</p>
+                <p>We realized that, while models are very capable at identifying reasonable values for other arguments, we had to engineer a tool interface that addressed this particular time-oriented weakness of LLMs. So we wrote the tool to expect a `look_back` parameter (an idea we took from the v1 API), which models were able to use more effectively, and our server translates the lookback argument (e.g. 10 min) into the appropriate time arguments (the current time minus the lookback duration).</p>
 
-                <p>An additional decision that was made pertained to handling the calculation logic of date and time-related data. Both the Jaeger and Prometheus APIs required specific time formatting, and therefore, the option was available to leave calculating that time to be more human-readable to the LLM. For a myriad of factors, LLMs tend to struggle with time (8). And through testing, this also reared its head, often hallucinating improper times and dates. Therefore, business logic was added in for the MCP to handle this logic so LLM models would not have to process it.</p>
+                <h3 id="securing-retriever">6.8 Securing Retriever:</h3>
+                <p>Security is an issue for any application, but even moreso for an application that holds potentially sensitive telemetry data. We needed to make sure our public-facing endpoints were secure without overcomplicating the user experience.</p>
+                <p>The first endpoint we considered was the MCP server: users needed a streamlined way to authenticate their clients. We initially planned on using OAuth2.0 as an established, secure, user-friendly means of providing access. There was a simpler option, however: provide a JWT (JSON Web Token) directly from the Retriever CLI. Retriever would hold the JWT secret in AWS Secrets Manager, and could mint tokens as needed as long as the requesting user was authenticated in AWS. From there, the user could copy the freshly generated token to their MCP configuration file. This constrained access in the same way OAuth2.0 would, but in a way that was simpler for users.</p>
+                <p>Having decided on this "direct JWT delivery" approach for the MCP, it was time to think about user-facing services. Jaeger doesn't provide any authentication support, while Prometheus supports a rudimentary basic auth strategy. In our target use case, it wouldn't make sense for individual users to have differing permissions; therefore, we wanted all user-facing services to authenticate the same way, using the same data for a given user.</p>
+                <p>We first considered Cognito, the de facto AWS user authentication service. As we continued to develop the MCP authentication infrastructure, though, we started to wonder if we could use the same JWT-only workflow for user authentication. Again, we didn't need different levels of permissions per user; any user with a valid JWT for their MCP client should also have access to Jaeger and Prometheus. This would let us avoid some of the infrastructure overhead associated with Cognito, such as creating user pools. It also tied security to a single reference point, the JWT secret; in the event of a security issue, the secret only needed to be regenerated once in Secrets Manager to invalidate all old JWTs. We built a proxy server, discussed below, to handle this JWT-based user authentication strategy.</p>
 
                 <h2 id="architecture">7. Architecture</h2>
                 <div class="diagram-image-container-medium image-modal-trigger">
@@ -268,12 +260,12 @@
                 </div>
                 <p>When a user runs the setup process in the CLI, Retriever uses Terraform to provision its infrastructure and start running its services:</p>
 
-                <h3 id="jaeger-collector">7.1 Jaeger Collector</h3>
+                <h3 id="jaeger-collector">7.1 Jaeger Collector:</h3>
                 <p>The Jaeger Collector is the endpoint for the user's trace data. As spans arrive, the Collector derives aggregated spanmetrics that record request counts, error rates, and request durations (RED metrics). Rather than sending each span directly to OpenSearch, the Collector sends data in periodic batches to reduce network traffic. The spanmetrics are exposed on a port to be scraped by Prometheus.</p>
 
-                <h3 id="opensearch">7.2 OpenSearch</h3>
+                <h3 id="opensearch">7.2: OpenSearch</h3>
                 <p>OpenSearch stores trace data, writing new data in bulk as it receives each batch from the Collector. Each span is stored as its own document.</p>
-                <p>When it's time to query this data, OpenSearch uses inverted indices(9) to quickly find the desired traces and spans. Indices are partitioned by day; because traces are naturally grouped by time and queries typically focus on recent data, this partitioning strategy doesn't slow down querying.</p>
+                <p>When it's time to query this data, OpenSearch uses inverted indices to quickly find the desired traces and spans. Indices are partitioned by day; because traces are naturally grouped by time and queries typically focus on recent data, this partitioning strategy doesn't slow down querying.</p>
                 
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/inverted-index.png" alt="Inverted Index Diagram">
@@ -295,19 +287,36 @@
                     <img src="assets/diagrams/jaeger-query.png" alt="Jaeger Query Architecture">
                 </div>
                 
-                <p>The Jaeger UI runs as part of the query service. Users can access the dashboard over the public internet via a load balancer. From there, they can search and filter to find the data they want, examine individual traces and spans in detail, and view spanmetrics pulled from Prometheus.</p>
+                <p>The Jaeger UI runs as part of the query service. Users can access the dashboard over the public internet via a load balancer. From there, they can search and filter to find the data they want, examine individual traces and spans in detail, and view spanmetrics pulled from Prometheus,</p>
 
-                <h3 id="mcp-server-arch">7.5 MCP Server</h3>
+                <h3 id="mcp-server-arch">7.5: MCP Server</h3>
                 <p>The Retriever MCP server is a TypeScript application using Express and the Model Context Protocol SDK. Because the MCP is designed to run in the cloud, it communicates over StreamableHTTP, the standard protocol for remote client/MCP communication. Clients connect to the MCP through the same load balancer that directs users to the Jaeger UI, with a POST request to the path /mcp.</p>
                 <p>Once a connection is established, clients can use the server's primary tools: list_services, get_traces, and get_service_health. When a client invokes a tool, the MCP server makes requests to Jaeger Query and Prometheus for trace and metric data, respectively. It then processes this data for compactness and LLM- or human-readability, and sends its result to the client.</p>
+                
+                <div class="diagram-image-container-medium">
+                    <img src="assets/diagrams/mcp-host-client-server.png" alt="MCP Host Client Server Architecture">
+                </div>
 
-                <h3 id="securing-retriever">7.6 Securing Retriever</h3>
-                <p>…</p>
+                <h3 id="securing-retriever">7.6 Public Interface</h3>
+                <p>Traffic from outside the network (users and MCP clients) connects to service endpoints via a single load balancer, which handles authentication and routing. Unauthenticated traffic is redirected to an authentication proxy server, where the user can authenticate with a JWT token. Given a valid token, the proxy server sets an authentication cookie for the user and redirects them to their desired service.</p>
 
                 <h2 id="future-development">8. Future Development</h2>
                 
-                <h3 id="enhancing-mcp">8.1 Enhancing The MCP Server</h3>
-                <p>The current setup for the Retriever MCP is tool-focused. And while it still provides impressive results, there is still ample room for the other primitives to be added in. Resources and Prompts will provide even more effective responses. Furthermore, JSON is the structure of the data that the MCP is being fed. It is effective, but TOON (Token-Oriented Object Notation) has become well known for efficient token usage for LLMS during the development of Retriever. It has been shown to increase token efficiency by upwards of 60% and even on the low end, it is safely 25% more effective. (9) Therefore, becoming more comfortable with TOON and including it in the MCP in the near future is a priority.</p>
+                <h3 id="enhancing-mcp">8.1: Enhancing The MCP Server</h3>
+                <p>The current implementation of the Retriever MCP focuses on a small set of powerful tools. While these tools have performed well in testing, we're interested in adding more features to further empower AI agents. New tools may suggest themselves as we continue to work with Retriever, and we're interested in learning what needs our users uncover. The MCP standard also includes other primitives that agents can make use of, such as prompt templates, which offer more opportunities to improve LLM performance.</p>
+                <p>We may be able to gain even better performance by changing the way our MCP shares data. TOON (Token-Oriented Object Notation) is a JSON replacement designed for more efficient LLM token usage (by around 25%, and potentially more). As we continue to work on distilling telemetry data for LLM use, TOON adoption is a natural fit.</p>
+                <p>MCP is a new standard and is undergoing rapid developments as it is gaining widespread adoption. In fact, the team behind MCP released updated guidance during our development of Retriever, steering development toward code execution.</p>
+                
+                <h3 id="observing-observability">8.2: Observing the Observability System</h3>
+                <p>What happens when Retriever goes down? We'd like to offer Retriever-caliber observability of Retriever itself. It's tempting to run a second deployment of Retriever to monitor the first, but there's a clear downside: any problems present in the primary deployment would be present in the secondary. If a bug takes down the main Retriever service, it's likely to take down the secondary right when users need it most. A more resilient option would be to instrument Retriever to pass telemetry data to AWS-managed services like CloudWatch and X Ray.</p>
+                
+                <h3 id="integrating-mcp-ui">8.3: Integrating the MCP and UI</h3>
+                <p>The Retriever UI and MCP are each useful, but they're isolated from one another. It's natural for them to start communicating, so that human users and AI agents can easily share and discuss the same data. Imagine these workflows:</p>
+                <ul>
+                    <li>As you browse the Jaeger dashboard, you notice an unusual cluster of spans with errors. You type in Cursor, "Analyze what I'm currently looking at in Retriever," and receive an analysis of that data.</li>
+                    <li>An alert comes in and you ask your agent, "Find groups of requests in the last day with a response time over 300ms and send me a link to that view in Retriever." After a few MCP interactions, the agent returns a link with the view you requested.</li>
+                </ul>
+                <p>While this would require some restructuring of the Retriever architecture, we're interested in the implementation challenge and excited by the possibilities.</p>
 
                 <h2 id="team">Our Team</h2>
                 <div class="team-grid">
