@@ -255,9 +255,6 @@
                 <p>We first considered Cognito, the de facto AWS user authentication service. As we continued to develop the MCP authentication infrastructure, though, we started to wonder if we could use the same JWT-only workflow for user authentication. Again, we didn't need different levels of permissions per user; any user with a valid JWT for their MCP client should also have access to Jaeger and Prometheus. This would let us avoid some of the infrastructure overhead associated with Cognito, such as creating user pools. It also tied security to a single reference point, the JWT secret; in the event of a security issue, the secret only needed to be regenerated once in Secrets Manager to invalidate all old JWTs. We built a proxy server, discussed below, to handle this JWT-based user authentication strategy.</p>
 
                 <h2 id="architecture">7. Architecture</h2>
-                <div class="diagram-image-container-medium image-modal-trigger">
-                    <img src="assets/diagrams/retriever-architecture.png" alt="Retriever Architecture Diagram" class="modal-image">
-                </div>
                 <p>When a user runs the setup process in the CLI, Retriever uses Terraform to provision its infrastructure and start running its services:</p>
 
                 <h3 id="jaeger-collector">7.1 Jaeger Collector:</h3>
@@ -299,6 +296,11 @@
 
                 <h3 id="securing-retriever">7.6 Public Interface</h3>
                 <p>Traffic from outside the network (users and MCP clients) connects to service endpoints via a single load balancer, which handles authentication and routing. Unauthenticated traffic is redirected to an authentication proxy server, where the user can authenticate with a JWT token. Given a valid token, the proxy server sets an authentication cookie for the user and redirects them to their desired service.</p>
+
+                <div class="diagram-image-container-medium image-modal-trigger">
+                    <img src="assets/diagrams/retriever-architecture.png" alt="Retriever Architecture Diagram" class="modal-image">
+                </div>
+                <p style="max-width: 75%; margin: 12px auto 24px; font-style: italic; color: var(--text-secondary); text-align: center;">Retriever Architecture</p>
 
                 <h2 id="future-development">8. Future Development</h2>
                 
