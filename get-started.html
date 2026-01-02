@@ -9,7 +9,7 @@
     <script>
         // Apply theme immediately to prevent flash of unstyled content
         (function() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedTheme = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
@@ -51,68 +51,13 @@
     </header>
 
     <main>
-        <section class="get-started-container">
-            <h1>Get Started with Retriever</h1>
-            <p class="intro-text">Follow these steps to spin up Retriever and start monitoring your applications with end-to-end observability.</p>
-            
-            <div class="instructions">
-                <div class="instruction-step">
-                    <h2>1. Prerequisites</h2>
-                    <p>Before you begin, ensure you have the following installed:</p>
-                    <ul>
-                        <li>Docker and Docker Compose (or your preferred container runtime)</li>
-                        <li>Node.js (version 18 or higher)</li>
-                        <li>Git</li>
-                    </ul>
-                </div>
-
-                <div class="instruction-step">
-                    <h2>2. Clone the Repository</h2>
-                    <p>Clone the Retriever repository from GitHub:</p>
-                    <pre><code>git clone https://github.com/TeamRetriever/retriever.git
-cd retriever</code></pre>
-                </div>
-
-                <div class="instruction-step">
-                    <h2>3. Install Dependencies</h2>
-                    <p>Install the required dependencies:</p>
-                    <pre><code>npm install</code></pre>
-                </div>
-
-                <div class="instruction-step">
-                    <h2>4. Configure Environment Variables</h2>
-                    <p>Create a <code>.env</code> file in the root directory and configure the necessary environment variables:</p>
-                    <pre><code>cp .env.example .env
-# Edit .env with your configuration</code></pre>
-                </div>
-
-                <div class="instruction-step">
-                    <h2>5. Start Retriever</h2>
-                    <p>Start the Retriever platform using Docker Compose:</p>
-                    <pre><code>docker-compose up -d</code></pre>
-                    <p>Or if you prefer to run it locally:</p>
-                    <pre><code>npm start</code></pre>
-                </div>
-
-                <div class="instruction-step">
-                    <h2>6. Access the Dashboard</h2>
-                    <p>Once Retriever is running, access the dashboard at:</p>
-                    <pre><code>http://localhost:3000</code></pre>
-                </div>
-
-                <div class="instruction-step">
-                    <h2>7. Connect Your Application</h2>
-                    <p>Follow the integration guide to connect your application to Retriever and start collecting traces.</p>
-                </div>
-            </div>
-
-            <div class="help-section">
-                <h2>Need Help?</h2>
-                <p>If you encounter any issues during setup, please refer to:</p>
-                <ul>
-                    <li><a href="https://github.com/TeamRetriever/retriever" target="_blank" rel="noopener noreferrer">GitHub Repository</a> for documentation and issues</li>
-                    <li><a href="index.html#case-study">Case Study</a> for examples and use cases</li>
-                </ul>
+        <section class="get-started-container" style="text-align: center; padding: 100px 20px; max-width: 800px; margin: 0 auto;">
+            <h1 style="font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 24px; background: var(--gradient-blue); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Coming Soon</h1>
+            <p style="font-size: 1.25rem; color: var(--text-secondary); line-height: 1.8; margin-bottom: 40px;">We're working hard to bring you the Retriever setup guide. Check back soon!</p>
+            <div style="margin-top: 60px;">
+                <a href="https://github.com/TeamRetriever/retriever" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 12px 32px; background: var(--gradient-blue); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: var(--shadow-md);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-lg)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='var(--shadow-md)'">
+                    Visit GitHub Repository
+                </a>
             </div>
         </section>
     </main>
@@ -122,8 +67,8 @@ cd retriever</code></pre>
             const themeToggle = document.querySelector('.theme-toggle');
             const html = document.documentElement;
             
-            // Get saved theme or default to light
-            const savedTheme = localStorage.getItem('theme') || 'light';
+            // Get saved theme or default to dark
+            const savedTheme = localStorage.getItem('theme') || 'dark';
             html.setAttribute('data-theme', savedTheme);
             
             themeToggle.addEventListener('click', function() {
