@@ -1,2 +1,2 @@
 # retriever-website
-Public website for Retriever - IaaS end-to-end, trace-focused observability platform with MCP server for small teams.
+Public website for Retriever - Infrastructure as Code that lets teams spin up a full observability stack + MCP server in their own cloud.
