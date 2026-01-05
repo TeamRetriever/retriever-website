@@ -5,7 +5,13 @@ const app = express();
 const PORT = 3000;
 
 // Serve static files from the root directory
-app.use(express.static(__dirname));
+app.use(express.static(__dirname, {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.png')) {
+            res.setHeader('Content-Type', 'image/png');
+        }
+    }
+}));
 
 // Route for index.html
 app.get('/', (req, res) => {

@@ -20,7 +20,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     line-height: 1.6;
     color: var(--text-primary);
-    background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
+    background: #ffffff;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -64,11 +64,11 @@ main {
     --accent-red: #ed4848;
     --accent-pink: #ff85da;
     
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #4ec0f9 0%, #1b2249 100%);
-    --gradient-blue: linear-gradient(135deg, #4ec0f9 0%, #1b2249 100%);
-    --gradient-cyan: linear-gradient(135deg, #4ec0f9 0%, #39b24a 100%);
-    --gradient-accent: linear-gradient(135deg, #ff85da 0%, #ed4848 100%);
+    /* Flat Colors (replacing gradients) */
+    --gradient-primary: #4ec0f9;
+    --gradient-blue: #4ec0f9;
+    --gradient-cyan: #4ec0f9;
+    --gradient-accent: #ff85da;
     
     /* Text Colors */
     --text-primary: #1a1a1a;
@@ -107,11 +107,11 @@ main {
     --accent-red: #ed4848;
     --accent-pink: #ff85da;
     
-    /* Gradients - Same */
-    --gradient-primary: linear-gradient(135deg, #4ec0f9 0%, #1b2249 100%);
-    --gradient-blue: linear-gradient(135deg, #4ec0f9 0%, #1b2249 100%);
-    --gradient-cyan: linear-gradient(135deg, #4ec0f9 0%, #39b24a 100%);
-    --gradient-accent: linear-gradient(135deg, #ff85da 0%, #ed4848 100%);
+    /* Flat Colors (replacing gradients) - Same */
+    --gradient-primary: #4ec0f9;
+    --gradient-blue: #4ec0f9;
+    --gradient-cyan: #4ec0f9;
+    --gradient-accent: #ff85da;
     
     /* Text Colors - Inverted */
     --text-primary: #f5f7fa;
@@ -190,18 +190,22 @@ nav a:first-child:hover {
 .nav-right a {
     color: var(--text-secondary);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.95rem;
     padding: 0.5rem 1rem;
     border-radius: 8px;
     transition: all 0.2s ease;
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
 }
 
 /* Case Study link hover - green */
 .nav-right a[href="#case-study"],
 .nav-right a[href="index.html#case-study"] {
     font-size: 0.95rem;
+    color: var(--text-secondary);
 }
 
 .nav-right a[href="#case-study"]:hover,
@@ -251,6 +255,40 @@ nav a:first-child:hover {
 }
 
 .nav-right a[href="team.html"]:hover::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+/* Get Started button in navigation */
+.nav-right a.nav-button {
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.nav-right a.nav-button:hover {
+    color: var(--accent-red);
+    background: rgba(237, 72, 72, 0.1);
+    transform: translateY(-1px);
+}
+
+.nav-right a.nav-button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 80%;
+    height: 2px;
+    background: var(--accent-red);
+    border-radius: 2px;
+    transition: transform 0.3s ease;
+}
+
+.nav-right a.nav-button:hover::after {
     transform: translateX(-50%) scaleX(1);
 }
 
@@ -383,7 +421,7 @@ nav a:first-child img {
     text-align: left;
     padding: 16px clamp(24px, 5vw, 40px);
     background: var(--gradient-blue);
-    color: white;
+    color: var(--primary-blue-dark);
     text-decoration: none;
     border-radius: 12px;
     font-weight: 600;
@@ -405,7 +443,7 @@ nav a:first-child img {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: rgba(255, 255, 255, 0.2);
     transition: left 0.5s ease;
 }
 
@@ -439,10 +477,7 @@ nav a:first-child img {
 .get-started-container h1 {
     font-size: clamp(2rem, 6vw, 3rem);
     margin-bottom: 20px;
-    background: var(--gradient-blue);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--gradient-blue);
     font-weight: 800;
     letter-spacing: -0.02em;
     word-wrap: break-word;
@@ -465,8 +500,7 @@ nav a:first-child img {
     padding: clamp(24px, 4vw, 32px);
     background: var(--bg-card);
     border-radius: 16px;
-    border-left: 4px solid;
-    border-image: var(--gradient-blue) 1;
+    border-left: 4px solid var(--gradient-blue);
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
     position: relative;
@@ -521,7 +555,7 @@ nav a:first-child img {
 }
 
 .instruction-step pre {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    background: #1e293b;
     color: #f8fafc;
     padding: 20px;
     border-radius: 12px;
@@ -537,7 +571,7 @@ nav a:first-child img {
 }
 
 [data-theme="dark"] .instruction-step pre {
-    background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+    background: #334155;
     border: 1px solid rgba(78, 192, 249, 0.2);
 }
 
@@ -560,14 +594,14 @@ nav a:first-child img {
 .help-section {
     margin-top: 50px;
     padding: 32px;
-    background: linear-gradient(135deg, rgba(78, 192, 249, 0.1) 0%, rgba(57, 178, 74, 0.1) 100%);
+    background: rgba(78, 192, 249, 0.1);
     border-radius: 16px;
     border: 1px solid rgba(78, 192, 249, 0.2);
     box-shadow: var(--shadow-md);
 }
 
 [data-theme="dark"] .help-section {
-    background: linear-gradient(135deg, rgba(78, 192, 249, 0.15) 0%, rgba(57, 178, 74, 0.15) 100%);
+    background: rgba(78, 192, 249, 0.15);
     border: 1px solid rgba(78, 192, 249, 0.3);
 }
 
@@ -957,8 +991,7 @@ nav a:first-child img {
     margin-top: 56px;
     margin-bottom: 24px;
     color: var(--primary-blue-dark);
-    border-bottom: 3px solid;
-    border-image: var(--gradient-blue) 1;
+    border-bottom: 3px solid var(--gradient-blue);
     padding-bottom: 12px;
     font-weight: 700;
     letter-spacing: -0.01em;
@@ -1046,17 +1079,16 @@ nav a:first-child img {
 .diagram-placeholder {
     font-style: italic;
     color: var(--text-muted);
-    background: linear-gradient(135deg, rgba(78, 192, 249, 0.05) 0%, rgba(255, 133, 218, 0.05) 100%);
+    background: rgba(78, 192, 249, 0.05);
     padding: 20px;
-    border-left: 4px solid;
-    border-image: var(--gradient-primary) 1;
+    border-left: 4px solid var(--gradient-primary);
     border-radius: 8px;
     margin: 24px 0;
     box-shadow: var(--shadow-sm);
 }
 
 [data-theme="dark"] .diagram-placeholder {
-    background: linear-gradient(135deg, rgba(78, 192, 249, 0.1) 0%, rgba(255, 133, 218, 0.1) 100%);
+    background: rgba(78, 192, 249, 0.1);
 }
 
 /* Diagram image container with light background for visibility */
@@ -1389,10 +1421,7 @@ nav a:first-child img {
     font-size: clamp(2rem, 6vw, 3rem);
     text-align: center;
     margin-bottom: 60px;
-    background: var(--gradient-blue);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--gradient-blue);
     font-weight: 800;
     letter-spacing: -0.02em;
     word-wrap: break-word;
