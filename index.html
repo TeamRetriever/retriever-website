@@ -87,7 +87,7 @@
                 <p>Retriever is an open-source, self-hosted observability service that puts valuable telemetry data in the hands of small teams. If you're running your application in AWS, Retriever can be ready to collect and display data in a few minutes. AI agents can use the Retriever MCP server to query and analyze data, so that you can diagnose and solve problems without having to alt-tab out of your IDE.</p>
 
                 <h2 id="modern-observability">2. Modern Observability</h2>
-                
+
                 <h3 id="what-is-observability">2.1 What is Observability?</h3>
                 <p>Observability, at its heart, is about the ability to understand the state of your application, now and in the past. With observability, an engineering team can, for example, see how that spike in site traffic is pushing the p95 response time from 200ms to 1.5 seconds. An observable application is one that lets us see that, say, memory usage on a particular service is steadily climbing toward its limit.</p>
                 <p>Observability is critical when, inevitably, something goes sideways in production and all heads turn toward the engineering team until the problem is identified and fixed.</p>
@@ -95,46 +95,38 @@
 
                 <h3 id="observability-applied">2.2 Observability Applied</h3>
                 <p>The first step in building an observable system is instrumentation, where developers write code within their application to send telemetry data to a central location. Once the application is instrumented, it sends its telemetry to a collector, an application designed to format and filter telemetry. The industry standard is OpenTelemetry, which defines both instrumentation SDKs and a protocol (OTLP) for transmitting telemetry.</p>
-                
+
                 <div class="diagram-image-container">
                     <img src="assets/diagrams/app-generating-telemetry.png" alt="App Generating Telemetry">
                 </div>
-                
+
                 <p>Once we're collecting data, we need a place to store it. Telemetry data has specialized storage requirements: new data is written to the database frequently and continuously, old data never needs to be updated, and very large volumes of data can accumulate over time. Specialized databases are needed to meet these requirements; we discuss some of the options for trace storage in <a href="#choosing-datastore" class="link-blue">section 5.2</a>.</p>
-                
+
                 <p>Now that all that telemetry is stored for querying when something goes awry, we need a way to visualize the telemetry--turning it from large JSON blobs into something that's easy to visually parse--so that we can easily use the telemetry to trace the issue to its source.</p>
-                
+
                 <p>In practice, this workflow typically starts with an alert: for instance, a Slack message triggered when a service's error rate spikes. The alert directs engineers to a visualizer where they can dig into the telemetry. That way, engineers can focus on their current sprint, and only need to divert their attention to their observability tools when a problem arises.</p>
 
                 <h3 id="why-trace-first">2.3 Why Trace-First Telemetry?</h3>
                 <p>Metrics and logs each play an important role in telemetry. Metrics are excellent for aggregating data points, like CPU utilization, over time, which helps engineers identify anomalies in the production environment. But a metric tells you that something is wrong, not where; when an error rate spikes, without other context, metrics generally can't pinpoint the culprit service. Meanwhile, logs usefully capture detailed, human-readable information about individual events. That said, correlating individual logs to reconstruct a single request's path can be a tedious task even in a monolithic architecture.</p>
-                
+
                 <div class="diagram-image-container-large">
                     <img src="assets/diagrams/visualizer-jaeger.png" alt="Jaeger UI Trace Waterfall">
                 </div>
-                
+
                 <p>Given the complexity of modern applications, traces emerged to address the observability challenges introduced by distributed systems; they stitch together all the sub-requests associated with a single incoming request so that developers can understand every step in the lifecycle of a request as it hops from service to service. A single trace is made of multiple spans, with the first span representing the root span and underlying spans representing a process that occurs during the parent request. Traces capture the complete journey of a request as it flows through multiple services, and therefore allow for powerful root cause analysis across a distributed system – but finding the relevant trace among thousands still requires manual investigation. This is where AI agents can help—if they can access the trace data.</p>
 
                 <h3 id="agentic-ai-observability">2.4 Agentic AI in Observability</h3>
-                
+
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/retriever-high-level.png" alt="Retriever High Level Architecture">
                 </div>
-                
+
                 <p>A modern approach to observability integrates AI agents. Utilizing AI to debug in production previously required iterations of combing through recent telemetry data and reasoning about which data was important context, then copy/pasting it into a chat with the agent, followed by iterations of narrowing or widening the context to eventually figure out the root cause. Finally, the bug fix is written and the solution pushed to prod.</p>
-                
-                <div class="diagram-image-container-medium">
-                    <img src="assets/diagrams/debugging-without-mcp.png" alt="Debugging without MCP">
-                </div>
-                
+
                 <p>Ideally, teams want to give the agent the ability to query trace data directly, so that it can perform root cause analysis side-by-side with the developer. This functionality was previously unlocked by writing a custom integration for an LLM client to query the trace store. The tradeoff to writing a custom integration is that if a team switches models (say, from Anthropic to Open AI) or clients (Cursor to Claude Code), a new integration would be needed--new authentication handling, new API wrappers, new response parsing--which could lead to endless cycles of integration writing and maintaining.</p>
-                
+
                 <p>The Model Context Protocol (MCP), has become widely adopted in 2025, largely because it cures the headaches around integrating each client individually. MCP is a standardized, model-agnostic protocol to enable new functionality in AI clients: an MCP server exposes callable functions (tools), the host (e.g., Cursor) can invoke those tools, and the LLM receives the results. For observability specifically, this means an MCP server can expose tools to Cursor that enable it to query the trace data store or recent metrics. From there, it can iterate on its own to perform root cause analysis.</p>
-                
-                <div class="diagram-image-container-medium">
-                    <img src="assets/diagrams/debugging-with-mcp.png" alt="Debugging with MCP">
-                </div>
-                
+
                 <p>It's worth noting one challenge for AI in observability applications: telemetry is generally verbose, by design, to give a large amount of context to human engineers who are making sense of the system. This verbosity presents a challenge for MCP-based debugging tools: telemetry data has been known to 'blow up the context window' when debugging with an agent. We describe a few approaches to addressing this challenge in section 5.7.</p>
 
                 <h2 id="existing-solutions">3. Existing Observability Solutions</h2>
@@ -149,7 +141,7 @@
                 <p>These don't cost money, but they can cost significant engineer time. Setting up and maintaining observability services gets complicated quickly; a full-fledged observability stack is its own microservice architecture, with all the needs that implies. Adding an MCP only increases the burden: some open source options have them, but some details, like authentication, are left to the user to figure out. Time spent building your observability stack is time that could be spent building valuable product features.</p>
 
                 <h2 id="retriever-solution">4. Retriever's Solution</h2>
-                
+
                 <h3 id="what-retriever-offers">4.1 What Retriever Offers</h3>
                 <p>Running the Retriever command-line tool will spin up a complete observability platform in AWS, ready to accept, store, and display telemetry data.</p>
                 <p>Retriever is focused on trace data and does not accept traditional logs or metrics. Instead, users can instrument their application to emit log data in the form of span events embedded within traces. Retriever also derives metrics, such as error rates, from the trace data it receives. Users can configure alerts based on these metrics to be sent to a dedicated Slack channel.</p>
@@ -172,30 +164,26 @@
 
                 <h3 id="comparing-retriever">4.3:  Comparing Retriever with Other Solutions</h3>
                 <div class="diagram-image-container-large">
-                    <img src="assets/diagrams/retriever-vs-others.png" alt="Retriever vs Other Solutions Comparison">
+                    <img src="assets/diagrams/solution-comparison.png" alt="Comparing Retriever with other solutions">
                 </div>
 
                 <h2 id="design-decisions">5. Important Design Decisions / Tradeoffs</h2>
-                
+
                 <h3 id="scoping-signals">5.1: Scoping Our Signals</h3>
                 <p>While the observability field recognizes three primary types of telemetry signals (as a recap - logs, metrics, and traces), it's not a given that a solution should support all three. Each signal must be ingested, stored, and queried in a different way, typically by different services; signals must also be correlated so that users can know, for instance, what logs belong to what traces. The question for us, then, was whether focusing on one or two signals could offer our users a more streamlined experience without sacrificing functionality.</p>
                 <p>As we researched open-source observability tools, we found ways to work with traces without sacrificing the descriptive power of logs or the high-level digestibility of metrics. By focusing solely on trace data, we were able to simplify our architecture, reduce infrastructure costs, and offer the user a more streamlined experience.</p>
 
                 <h3 id="choosing-backend">5.2: Choosing A Stack</h3>
                 <p>With traces in mind, we set out to choose the set of components that would form our trace observability system. While it was certainly possible to build our own services to handle collection, storage, querying, and visualization, that wasn't the focus of Retriever. We wanted to draw from the many high-quality open-source options and package them with simple automated deployment and MCP functionality. After discarding some clearly unsuitable options like the ELK stack and GreptimeDB, we were left with two candidates: Grafana and Jaeger.</p>
-                
+
                 <h4>Grafana</h4>
                 <p>The Grafana stack is an ecosystem of services that handle different telemetry signals, with Grafana itself as the visualization service that pulls all of the telemetry data together. Grafana's draw was flexibility. The dashboard allows users a lot of freedom to customize their UI to their needs. On a project scope level, Grafana would also allow us to expand Retriever to handle the other telemetry signals in the future.</p>
                 <p>However, Grafana's trace service, Tempo, didn't meet our needs. Early releases of Tempo didn't allow users to query traces at all; they had to find a trace id in a metric or log, then look up that id in Tempo. Tempo has recently added TraceQL for true trace querying, but this is a young feature that is still being updated, and not yet a good foundation for a dedicated trace observability service like Retriever.</p>
-                
+
                 <h4>Jaeger</h4>
                 <p>Jaeger is an open-source solution purpose-built for trace data. It's mature and widely adopted, but not out of date - in fact, Jaeger v2 was released in late 2024.</p>
                 <p>The Jaeger dashboard isn't as open-ended as other options like Grafana; you're limited to a few standardized views of your data. However, this isn't necessarily a bad thing. As we test-drove backends, the Jaeger UI stood out as easy and pleasant to use, while still allowing for flexible querying.</p>
                 <p>As a battle-tested solution with a shared focus on trace data, Jaeger stood out as a natural fit for Retriever.</p>
-                
-                <div class="diagram-image-container-large">
-                    <img src="assets/diagrams/jaeger-vs-others.png" alt="Jaeger vs Other Platforms Comparison">
-                </div>
 
                 <h3 id="choosing-datastore">5.3: Choosing a Data Store</h3>
                 <p>Having settled on Jaeger as our query and UI solution, it was time to choose a storage solution. Jaeger supports several integrations, but many of these were clearly the wrong fit. For instance, Apache Cassandra is a distributed database with incredible scalability, but our target user doesn't operate at a scale that generates the massive volumes of data Cassandra is suited for; a simpler database architecture is better. Clickhouse is an extremely performant column-oriented database, but there isn't yet an official Jaeger integration, and we didn't want to rely on the experimental integration.</p>
@@ -211,13 +199,13 @@
                 <p>From the beginning, we planned for Retriever to be a service users would self-host in AWS. Our first big infrastructure decision was: where in AWS? Retriever could deploy in its own VPC, separate from the VPC the user's application was running in. The user would send their telemetry data to some public endpoint provided by Retriever.</p>
                 <p>There was a lot to like about this strategy. It compartmentalized Retriever from the user's other AWS services. It didn't require that the user have any particular infrastructure set up already. In fact, it didn't require that the user run their application in AWS at all - the application could run anywhere, in a cloud or on-premises, and still use Retriever.</p>
                 <p>The downside was security. Since telemetry data was traveling over the public internet, it needed to be encrypted and connections needed to be authenticated. The OpenTelemetry standard mandates MTLS (Mutual Transport Layer Security) for this, which the user would need to configure for their own application. Security also adds compute time to every request; since telemetry collection involves a continuous stream of requests, this adds up.</p>
-                
+
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/two-vpcs.png" alt="Retriever in Separate VPCs">
                 </div>
-                
+
                 <p>To avoid these problems, we decided to deploy Retriever such that the Jaeger collector ran in the same private subnet as the user's telemetry-emitting service. Here, the telemetry data never leaves the subnet, meaning we don't need to worry about a secure connection. Users need to provide the VPC and subnets, but they don't have to worry about configuring MTLS.</p>
-                
+
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/one-vpc.png" alt="Retriever in User's VPC">
                 </div>
@@ -234,7 +222,7 @@
                 <p>We found that building just a few highly customizable tools, like `get_traces`, which has the ability to query for one or more traces that match many criteria, allowed for fewer tool calls during debugging; one tool call for "traces from 'checkout' with error codes in the last 5 minutes" instead of chaining together 3 or 4 calls of single-purpose tools for the same information.</p>
                 <p><strong>Selective Context Extraction</strong></p>
                 <p>Reducing tool count was only part of the optimization — we also had to minimize the data returned by each tool call. A common challenge when working with LLMs is efficiently managing the context window: giving the model the useful data it needs to do root cause analysis while not blowing up the context window and bringing the chat to an abrupt halt. In our testing, a typical span from the v3 API was approximately 2.5kb, or ~800 tokens. A single request that touches, say, 5 or 6 services has a trace as large as 4000 tokens. Our MCP distills the Jaeger API response to about 500 tokens, more than an 85% reduction in tokens, significantly optimizing interactions with an LLM.</p>
-		
+
                 <p>Prior to forwarding Jaeger's response to the LLM, our server builds a trace summary optimized for debugging, keeping only a handful of attributes, like traceId, operation, and status, plus error details and relevant tags. That means we drop token-heavy data like internal instrumentation metadata, unrelated trace flags, resource attributes beyond service name.  Similarly, the MCP condenses 8 separate Prometheus API responses into a single unified object that compares the returned metrics to given thresholds to illustrate the health of the system.</p>
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/before-data-distillation.png" alt="Before Data Distillation">
@@ -253,6 +241,11 @@
                 <p>We first considered Cognito, the de facto AWS user authentication service. As we continued to develop the MCP authentication infrastructure, though, we started to wonder if we could use the same JWT-only workflow for user authentication. Again, we didn't need different levels of permissions per user; any user with a valid JWT for their MCP client should also have access to Jaeger and Prometheus. This would let us avoid some of the infrastructure overhead associated with Cognito, such as creating user pools. It also tied security to a single reference point, the JWT secret; in the event of a security issue, the secret only needed to be regenerated once in Secrets Manager to invalidate all old JWTs. We built a proxy server, discussed below, to handle this JWT-based user authentication strategy.</p>
 
                 <h2 id="architecture">6. Architecture</h2>
+
+                <div class="diagram-image-container-medium image-modal-trigger">
+                    <img src="assets/diagrams/full-architecture.png" alt="Retriever Architecture Diagram" class="modal-image">
+                </div>
+
                 <p>When a user runs the setup process in the CLI, Retriever uses Terraform to provision its infrastructure and start running its services:</p>
 
                 <h3 id="jaeger-collector">6.1  Jaeger Collector:</h3>
@@ -261,7 +254,7 @@
                 <h3 id="opensearch">6.2: OpenSearch</h3>
                 <p>OpenSearch stores trace data, writing new data in bulk as it receives each batch from the Collector. Each span is stored as its own document.</p>
                 <p>When it's time to query this data, OpenSearch uses inverted indices to quickly find the desired traces and spans. Indices are partitioned by day; because traces are naturally grouped by time and queries typically focus on recent data, this partitioning strategy doesn't slow down querying.</p>
-                
+
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/inverted-index.png" alt="Inverted Index Diagram">
                 </div>
@@ -277,17 +270,17 @@
 
                 <h3 id="jaeger-query">6.4: Jaeger Query and UI</h3>
                 <p>Jaeger Query acts as a bridge between the trace storage and anything that needs the trace data; it provides a RESTful API for the UI and MCP.</p>
-                
+
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/jaeger-query.png" alt="Jaeger Query Architecture">
                 </div>
-                
+
                 <p>The Jaeger UI runs as part of the query service. Users can access the dashboard over the public internet via a load balancer. From there, they can search and filter to find the data they want, examine individual traces and spans in detail, and view spanmetrics pulled from Prometheus,</p>
 
                 <h3 id="mcp-server-arch">6.5: MCP Server</h3>
                 <p>The Retriever MCP server is a TypeScript application using Express and the Model Context Protocol SDK. Because the MCP is designed to run in the cloud, it communicates over StreamableHTTP, the standard protocol for remote client/MCP communication. Clients connect to the MCP through the same load balancer that directs users to the Jaeger UI, with a POST request to the path /mcp.</p>
                 <p>Once a connection is established, clients can use the server's primary tools: list_services, get_traces, and get_service_health. When a client invokes a tool, the MCP server makes requests to Jaeger Query and Prometheus for trace and metric data, respectively. It then processes this data for compactness and LLM- or human-readability, and sends its result to the client.</p>
-                
+
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/mcp-host-client-server.png" alt="MCP Host Client Server Architecture">
                 </div>
@@ -295,20 +288,15 @@
                 <h3 id="securing-retriever">6.6 Public Interface</h3>
                 <p>Traffic from outside the network (users and MCP clients) connects to service endpoints via a single load balancer, which handles authentication and routing. Unauthenticated traffic is redirected to an authentication proxy server, where the user can authenticate with a JWT token. Given a valid token, the proxy server sets an authentication cookie for the user and redirects them to their desired service.</p>
 
-                <div class="diagram-image-container-medium image-modal-trigger">
-                    <img src="assets/diagrams/full-architectureasset_5_6x-1.png" alt="Retriever Architecture Diagram" class="modal-image">
-                </div>
-                <p style="max-width: 75%; margin: 12px auto 24px; font-style: italic; color: var(--text-secondary); text-align: center;">Retriever Architecture</p>
-
                 <h2 id="future-development">7. Future Development</h2>
-                
+
                 <h3 id="enhancing-mcp">7.1: Enhancing The MCP Server</h3>
                 <p>The current implementation of the Retriever MCP focuses on a small set of powerful tools. While these tools have performed well in testing, we're interested in adding more features to further empower AI agents. New tools may suggest themselves as we continue to work with Retriever, and we're interested in learning what needs our users uncover. The MCP standard also includes other primitives that agents can make use of, such as prompt templates, which offer more opportunities to improve LLM performance. Additionally, MCP is guiding development of MCP servers toward the use of code execution, in which an agent can use an internal coding sandbox to execute code before adding context to the window that is sent back to the model. Our server currently returns both the plain text `content` as well as the  code-execution-friendly response format `structured_response` so that it can easily integrate in the future with agents who have code execution enabled.</p>
                 <p>We may be able to gain even better performance by changing the way our MCP shares data. TOON (Token-Oriented Object Notation) is a JSON replacement designed for more efficient LLM token usage (by around 25%, and potentially more). As we continue to work on distilling telemetry data for LLM use, TOON adoption is a natural fit.</p>
-                
+
                 <h3 id="observing-observability">7.2: Observing the Observability System</h3>
                 <p>What happens when Retriever goes down? We'd like to offer Retriever-caliber observability of Retriever itself. It's tempting to run a second deployment of Retriever to monitor the first, but there's a clear downside: any problems present in the primary deployment would be present in the secondary. If a bug takes down the main Retriever service, it's likely to take down the secondary right when users need it most. A more resilient option would be to instrument Retriever to pass telemetry data to AWS-managed services like CloudWatch and X Ray.</p>
-                
+
                 <h3 id="integrating-mcp-ui">7.3: Integrating the MCP and UI</h3>
                 <p>The Retriever UI and MCP are each useful, but they're isolated from one another. It's natural for them to start communicating, so that human users and AI agents can easily share and discuss the same data. Imagine these workflows:</p>
                 <ul>
@@ -416,6 +404,9 @@
                         </div>
                     </div>
                 </div>
+                <footer>
+                    <i>Some icons provided by <a href="https://www.flaticon.com">Flaticon</a> creators Freepik, Gajah Mada, juicy_fish, and Vlad Szirka.</i>
+                </footer>
             </div>
         </section>
     </main>
@@ -426,7 +417,7 @@
         const caseStudyContent = document.querySelector('.case-study-content');
         const tocSidebar = document.querySelector('.toc-sidebar');
         const logoLinksContainer = document.querySelector('.logo-links-container');
-        
+
         // Make TOC links jump instantly instead of smooth scrolling
         tocLinks.forEach(link => {
             link.addEventListener('click', function(e) {
@@ -449,7 +440,7 @@
                 }
             });
         });
-        
+
         // Threshold for showing TOC (when user scrolls past the hero section)
         const TOC_SHOW_THRESHOLD = 300;
 
@@ -458,17 +449,17 @@
 
             const scrollPosition = window.scrollY;
             const heroBottom = logoLinksContainer.offsetTop + logoLinksContainer.offsetHeight;
-            
+
             // Find the "Future Development" section - hide TOC when we reach it
             const futurePlansSection = document.getElementById('future-development');
             let shouldShow = false;
-            
+
             if (futurePlansSection) {
                 // Get absolute position relative to document
                 const futurePlansRect = futurePlansSection.getBoundingClientRect();
                 const futurePlansTop = scrollPosition + futurePlansRect.top;
                 // Hide TOC when we reach the Future Development section
-                shouldShow = scrollPosition > heroBottom - TOC_SHOW_THRESHOLD && 
+                shouldShow = scrollPosition > heroBottom - TOC_SHOW_THRESHOLD &&
                             scrollPosition < futurePlansTop;
             } else {
                 // Fallback if section not found
@@ -484,7 +475,7 @@
 
         function updateActiveSection() {
             if (!caseStudyContent) return;
-            
+
             let current = '';
             let currentSection = null;
             let currentSectionTop = 0;
@@ -497,10 +488,10 @@
             sections.forEach((section, index) => {
                 const sectionTop = contentTop + section.offsetTop;
                 const nextSection = sections[index + 1];
-                const sectionBottom = nextSection 
-                    ? contentTop + nextSection.offsetTop 
+                const sectionBottom = nextSection
+                    ? contentTop + nextSection.offsetTop
                     : contentTop + caseStudyContent.offsetHeight;
-                
+
                 if (scrollPosition + 200 >= sectionTop && scrollPosition < sectionBottom) {
                     current = section.getAttribute('id');
                     currentSection = section;
@@ -513,27 +504,27 @@
             tocLinks.forEach(link => {
                 link.classList.remove('active', 'progress');
                 const href = link.getAttribute('href');
-                
+
                 if (href && href === '#' + current && currentSection) {
                     link.classList.add('active');
-                    
+
                     // Calculate scroll progress within the current section
                     const sectionHeight = currentSectionBottom - currentSectionTop;
-                    const scrollProgress = Math.max(0, Math.min(1, 
+                    const scrollProgress = Math.max(0, Math.min(1,
                         (scrollPosition + viewportHeight / 2 - currentSectionTop) / sectionHeight
                     ));
-                    
+
                     // Apply progress to the active link
                     link.style.setProperty('--progress', scrollProgress);
                     link.classList.add('progress');
-                    
+
                     // Scroll TOC to show active link
                     if (tocSidebar && tocSidebar.classList.contains('visible')) {
                         const linkTop = link.offsetTop;
                         const linkHeight = link.offsetHeight;
                         const sidebarHeight = tocSidebar.offsetHeight;
                         const scrollTop = tocSidebar.scrollTop;
-                        
+
                         if (linkTop < scrollTop) {
                             tocSidebar.scrollTo({ top: linkTop - 20, behavior: 'smooth' });
                         } else if (linkTop + linkHeight > scrollTop + sidebarHeight) {
@@ -558,11 +549,11 @@
         (function() {
             const themeToggle = document.querySelector('.theme-toggle');
             const html = document.documentElement;
-            
+
             // Get saved theme or default to dark
             const savedTheme = localStorage.getItem('theme') || 'dark';
             html.setAttribute('data-theme', savedTheme);
-            
+
             themeToggle.addEventListener('click', function() {
                 const currentTheme = html.getAttribute('data-theme');
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -614,7 +605,7 @@
 
             overlay.addEventListener('click', closeModal);
             closeBtn.addEventListener('click', closeModal);
-            
+
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     closeModal();

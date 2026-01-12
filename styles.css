@@ -53,34 +53,34 @@ main {
     --palette-green: #39b24a;
     --palette-red: #ed4848;
     --palette-pink: #ff85da;
-    
+
     /* Primary Colors */
     --primary-blue: #4ec0f9;
     --primary-blue-dark: #1b2249;
     --primary-blue-light: #4ec0f9;
-    
+
     /* Accent Colors */
     --accent-green: #39b24a;
     --accent-red: #ed4848;
     --accent-pink: #ff85da;
-    
+
     /* Flat Colors (replacing gradients) */
     --gradient-primary: #4ec0f9;
     --gradient-blue: #4ec0f9;
     --gradient-cyan: #4ec0f9;
     --gradient-accent: #ff85da;
-    
+
     /* Text Colors */
     --text-primary: #1a1a1a;
     --text-secondary: #4b5563;
     --text-muted: #6b7280;
-    
+
     /* Background Colors */
     --bg-white: #ffffff;
     --bg-light: #f8fafc;
     --bg-card: #ffffff;
     --border-light: #e5e7eb;
-    
+
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -96,34 +96,34 @@ main {
     --palette-green: #39b24a;
     --palette-red: #ed4848;
     --palette-pink: #ff85da;
-    
+
     /* Primary Colors - Same */
     --primary-blue: #4ec0f9;
     --primary-blue-dark: #1b2249;
     --primary-blue-light: #4ec0f9;
-    
+
     /* Accent Colors - Same */
     --accent-green: #39b24a;
     --accent-red: #ed4848;
     --accent-pink: #ff85da;
-    
+
     /* Flat Colors (replacing gradients) - Same */
     --gradient-primary: #4ec0f9;
     --gradient-blue: #4ec0f9;
     --gradient-cyan: #4ec0f9;
     --gradient-accent: #ff85da;
-    
+
     /* Text Colors - Inverted */
     --text-primary: #f5f7fa;
     --text-secondary: #cbd5e1;
     --text-muted: #94a3b8;
-    
+
     /* Background Colors - Dark */
     --bg-white: #0f172a;
     --bg-light: #1e293b;
     --bg-card: #1e293b;
     --border-light: #334155;
-    
+
     /* Shadows - Adjusted for dark mode */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
@@ -307,6 +307,13 @@ nav a:first-child img {
     vertical-align: middle;
     color: var(--text-secondary);
     transition: all 0.2s ease;
+}
+
+footer {
+    border-top: 3px solid var(--gradient-blue);
+    margin-top: 50px;
+    padding-top: 20px;
+    text-align: center;
 }
 
 /* Dark Mode Toggle Button */
@@ -818,7 +825,7 @@ nav a:first-child img {
     .toc-sidebar {
         display: none;
     }
-    
+
     .case-study-container {
         margin-left: 0;
     }
@@ -828,26 +835,26 @@ nav a:first-child img {
     html {
         font-size: 14px;
     }
-    
+
     nav {
         padding: 1rem clamp(0.5rem, 2vw, 1rem);
         flex-wrap: wrap;
     }
-    
+
     nav a:first-child {
         font-size: 1.25rem;
     }
-    
+
     .nav-right {
         gap: clamp(8px, 2vw, 12px);
         flex-wrap: wrap;
     }
-    
+
     .nav-right a {
         font-size: 0.85rem;
         padding: 0.4rem clamp(0.5rem, 2vw, 0.8rem);
     }
-    
+
     .logo-links-container {
         flex-direction: column;
         gap: 40px;
@@ -855,54 +862,54 @@ nav a:first-child img {
         padding: 40px clamp(20px, 4vw, 40px);
         min-height: calc(100vh - 120px);
     }
-    
+
     .logo-section {
         max-width: 100%;
         text-align: center;
     }
-    
+
     .get-started-container h1,
     .case-study-container h1,
     .team-page-container h1 {
         font-size: clamp(1.75rem, 6vw, 2rem);
     }
-    
+
     .case-study-container h2 {
         font-size: clamp(1.5rem, 5vw, 1.75rem);
     }
-    
+
     .instruction-step {
         padding: clamp(20px, 4vw, 24px);
     }
-    
+
     .team-grid {
         grid-template-columns: repeat(2, 1fr) !important;
         grid-auto-flow: row !important;
         gap: clamp(20px, 4vw, 30px);
         padding: 40px clamp(15px, 4vw, 20px) 0 clamp(15px, 4vw, 20px);
     }
-    
+
     .team-member {
         min-width: 0;
         overflow: hidden;
     }
-    
+
     .team-member img {
         max-width: clamp(120px, 25vw, 180px);
     }
-    
+
     .team-name {
         font-size: clamp(1.1rem, 4vw, 1.35rem);
     }
-    
+
     .team-role {
         font-size: clamp(0.95rem, 3.5vw, 1.15rem);
     }
-    
+
     .team-location {
         font-size: clamp(0.85rem, 3vw, 1rem);
     }
-    
+
     .team-social {
         flex-wrap: wrap;
         gap: 8px;
@@ -913,56 +920,56 @@ nav a:first-child img {
     html {
         font-size: 13px;
     }
-    
+
     .logo-links-container {
         gap: 30px;
         padding: 30px clamp(15px, 4vw, 20px);
     }
-    
+
     .links-section a {
         padding: 14px clamp(20px, 6vw, 32px);
         font-size: 0.95rem;
     }
-    
+
     .team-grid {
         grid-template-columns: repeat(2, 1fr) !important;
         grid-auto-flow: row !important;
         gap: clamp(15px, 4vw, 25px);
         padding: 40px clamp(10px, 3vw, 15px) 0 clamp(10px, 3vw, 15px);
     }
-    
+
     .team-member {
         min-width: 0;
         overflow: hidden;
         max-width: 100%;
     }
-    
+
     .team-member img {
         max-width: clamp(100px, 20vw, 140px);
     }
-    
+
     .team-name {
         font-size: clamp(0.95rem, 3.5vw, 1.2rem);
     }
-    
+
     .team-role {
         font-size: clamp(0.9rem, 3vw, 1.05rem);
     }
-    
+
     .team-location {
         font-size: clamp(0.8rem, 2.5vw, 0.95rem);
     }
-    
+
     .team-social {
         flex-wrap: nowrap;
         gap: 8px;
     }
-    
+
     .team-social a {
         width: 36px;
         height: 36px;
     }
-    
+
     .team-social svg {
         width: 20px;
         height: 20px;
@@ -1115,7 +1122,7 @@ nav a:first-child img {
 .diagram-image-container img {
     max-width: 100%;
     height: auto;
-    display: block;
+    display: inline-block;
 }
 
 /* Larger diagram container for important diagrams */
@@ -1142,7 +1149,7 @@ nav a:first-child img {
 .diagram-image-container-large img {
     max-width: 100%;
     height: auto;
-    display: block;
+    display: inline-block;
 }
 
 /* Medium diagram container for 75% width */
@@ -1169,7 +1176,7 @@ nav a:first-child img {
 .diagram-image-container-medium img {
     max-width: 100%;
     height: auto;
-    display: block;
+    display: inline-block;
 }
 
 /* Image Modal Styles - Make all diagram containers clickable */
