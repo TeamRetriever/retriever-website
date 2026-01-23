@@ -95,7 +95,11 @@
 
                 <h3 id="observability-applied">2.2 Observability Applied</h3>
                 <p>The first step in building an observable system is instrumentation, where developers write code within their application to send telemetry data to a central location. Once the application is instrumented, it sends its telemetry to a collector, an application designed to format and filter telemetry. The industry standard is OpenTelemetry, which defines both instrumentation SDKs and a protocol (OTLP) for transmitting telemetry.</p>
-                <!-- insert "app generating telemetry diagram" here-->
+
+                <div class="diagram-image-container-medium">
+                    <img src="assets/diagrams/telemetry-signals.png" alt="An app emitting telemetry signals">
+                </div>
+
                 <p>Once we're collecting data, we need a place to store it. Telemetry data has specialized storage requirements: new data is written to the database frequently and continuously, old data never needs to be updated, and very large volumes of data can accumulate over time. Specialized databases are needed to meet these requirements; we discuss some of the options for trace storage in <a href="#choosing-datastore" class="link-blue">section 5.2</a>.</p>
 
                 <p>Now that all that telemetry is stored for querying when something goes awry, we need a way to visualize the telemetry--turning it from large JSON blobs into something that's easy to visually parse--so that we can easily use the telemetry to trace the issue to its source.</p>
@@ -157,7 +161,7 @@
                 </ul>
 
                 <h3 id="comparing-retriever">4.3:  Comparing Retriever with Other Solutions</h3>
-                <div class="diagram-image-container-large">
+                <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/solution-comparison.png" alt="Comparing Retriever with other solutions">
                 </div>
 
@@ -243,11 +247,9 @@
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/inverted-index.png" alt="Inverted Index Diagram">
                 </div>
-                <p style="max-width: 75%; margin: 12px auto 24px; font-style: italic; color: var(--text-secondary); text-align: left;">Inverted Indexing Allows for More Queryable Telemetry</p>
                 <div class="diagram-image-container-medium">
                     <img src="assets/diagrams/forward-index.png" alt="Forward Index Diagram">
                 </div>
-                <p style="max-width: 75%; margin: 12px auto 24px; font-style: italic; color: var(--text-secondary); text-align: left;">Forward Indexing Allows for Fast, Cheap Data Ingestion and Storage</p>
 
                 <h3 id="prometheus">6.3: Prometheus and AlertManager</h3>
                 <p>Prometheus stores metric data, scraping spanmetrics from the Jaeger Collector at short intervals, and takes responsibility for alerting. In Retriever, Prometheus is configured to fire alerts based on general heuristics, such as a service that returns an error more than 5% of the time. These alerts are sent to AlertManager, which in turn delivers them to a user-specified endpoint.</p>
@@ -259,10 +261,13 @@
                 <p>The Jaeger UI runs as part of the query service. Users can access the dashboard over the public internet via a load balancer. From there, they can search and filter to find the data they want, examine individual traces and spans in detail, and view spanmetrics pulled from Prometheus,</p>
 
                 <h3 id="mcp-server-arch">6.5: MCP Server</h3>
+
+                <div class="diagram-image-container-medium">
+                    <img src="assets/diagrams/mcp-architecture.png" alt="The path of a request to the MCP server">
+                </div>
+
                 <p>The Retriever MCP server is a TypeScript application using Express and the Model Context Protocol SDK. Because the MCP is designed to run in the cloud, it communicates over StreamableHTTP, the standard protocol for remote client/MCP communication. Clients connect to the MCP through the same load balancer that directs users to the Jaeger UI, with a POST request to the path /mcp.</p>
                 <p>Once a connection is established, clients can use the server's primary tools: list_services, get_traces, and get_service_health. When a client invokes a tool, the MCP server makes requests to Jaeger Query and Prometheus for trace and metric data, respectively. It then processes this data for compactness and LLM- or human-readability, and sends its result to the client.</p>
-
-                <!-- insert "mcp server workflow" diagram here-->
 
                 <h3 id="securing-retriever">6.6 Public Interface</h3>
                 <p>Traffic from outside the network (users and MCP clients) connects to service endpoints via a single load balancer, which handles authentication and routing. Unauthenticated traffic is redirected to an authentication proxy server, where the user can authenticate with a JWT token. Given a valid token, the proxy server sets an authentication cookie for the user and redirects them to their desired service.</p>
