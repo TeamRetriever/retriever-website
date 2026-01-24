@@ -1435,3 +1435,49 @@ footer {
     overflow-wrap: break-word;
 }
 
+/* Get Started Page Styles */
+.get-started-section {
+    margin-bottom: 60px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.get-started-section:last-of-type {
+    border-bottom: none;
+}
+
+.get-started-section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.get-started-section p {
+    margin-bottom: 24px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+/* Asciinema Container Styles */
+.asciinema-container {
+    margin: 32px 0;
+    border-radius: 8px;
+    overflow-x: auto;
+    box-shadow: var(--shadow-md);
+    background: #1e1e1e;
+}
+
+.asciinema-container .asciinema-player-wrapper {
+    min-width: fit-content;
+}
+
+/* Responsive adjustments for asciinema player */
+@media (max-width: 768px) {
+    .asciinema-container {
+        margin: 24px -20px;
+        border-radius: 0;
+    }
+}
+
